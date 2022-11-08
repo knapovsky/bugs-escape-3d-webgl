@@ -1,0 +1,123 @@
+\chapter{Koncepce hry}
+\label{chap:analysis}
+Návrh implementované hry zakládá na analýze hry Beru¹ky 2, která byla provedena metodou \textit{èerné skøíòky}\footnote{Na základì akcí u¾ivatele byla zkoumána reakce hry s tím, ¾e princip vnitøní implementace zùstal utajen.}. Hra je nejprve struènì pøedstavena a následnì jsou uvedeny výsledky herní analýzy, na kterých zakládá implementace~\ref{chap:implementace}
+
+\section{Beru¹ky 2}
+Beru¹ky 2, neboli také Beru¹ky 3D, jsou pokraèováním logické hry vývojáøského týmu Anakreon\footnote{\url{www.anakreon.cz}}, jeho¾ èlenem je pan Ing. Martin Stránský, který byl konzultantem této bakaláøské práce. Oproti své první, volnì dostupné verzi, bylo toto pokraèování od poèátku vytváøeno jako komerèní produkt. Hra byla od roku 2004 distribuována v Èeské republice a nìkterých dal¹ích zemích spoleèností Cinemax. V bøeznu roku 2011 byla èást této hry uvolnìna pod open-source licencí a je dále vyvíjena panem Stránským. První verze hry Beru¹ky je svou koncepcí velmi podobná høe Sokoban~\footnote{\url{https://en.wikipedia.org/wiki/Sokoban}}. Druhá verze hry se svou koncepcí pøíli¹ od prvního dílu neodli¹uje, av¹ak do hry pøibyly nové herní prvky, a co je hlavní, hra je kompletnì ve 3D. Ka¾dá úroveò této hry je logickou høíèkou, která ke svému øe¹ení vy¾aduje volbu správného plánu a dávku trpìlivosti. Ka¾dá z beru¹ek má schopnost pøed sebou tlaèit bedny a pou¾ívat herní pøedmìty, èím¾ vytváøí cestu k cíli, av¹ak pro jeho dosa¾ení je èasto dùle¾ité, aby spolu beru¹ky vzájemnì spolupracovali.
+
+Pùvodní hra distribuovaná firmou Cinemax obsahuje celkovì 160 herních úrovní vèetnì 20 tutoriálù a 45 jednodu¹¹ích úrovní, které jsou urèeny pro mlad¹í hráèe a trénink. Hlavní souèástí hry je pak \textit{Beru¹èí cesta}, která obsahuje celkem 95 úrovní rozdìlených do 9 epizod odehrávajících se v rùzných prostøedích. Open-source verze hry pak obsahuje tutoriály, nìkteré tréninkové úrovnì a 3 z úrovní Beru¹èí cesty.
+
+\section{Herní pole}
+Herní pole je ve tvaru krychle èi kvádru a je rozdìleno na jednotlivé pozice, ve kterých jsou umístìny jeho prvky (diagram~\ref{fig:gameField}). Nikdy nemù¾e dojít k situaci, ¾e by se herní prvek vèetnì beru¹ek vyskytl mimo herní pole. Po prvcích jako jsou bedny, èi zeï je mo¾né se volnì pohybovat, av¹ak beru¹ka nikdy nemù¾e z vy¹¹í herní pozice seskoèit dolù.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{gameField}
+\caption{Herní pole a jeho prvky}
+\label{fig:gameField}
+\end{figure}
+
+\section{Prvky herního pole}
+Jak ji¾ bylo uvedeno, v rámci herního pole jsou umístìny prvky, jejich¾ rozmístìní pøedstavuje samotnou logickou høíèku, kterou hráè øe¹í. Prvky se od sebe li¹í nejen funkèností a vzhledem, ale také tím, ¾e nìkteré z nich jsou umístìny staticky (hráè s nimi nemù¾e pohnout) a nìkteré z nich jsou dynamické (bedny, výbu¹niny, \ldots). Následuje pøehled prvkù herního pole a jejich struèný popis.
+
+\myparagraph{Beru¹ka}  %\item[Beru¹ka] \hfill \\
+V ka¾dé herní úrovni se vyskytuje 1-5 beru¹ek, které jsou ovládány hráèem. Beru¹ky mohou pohybovat bednami, èi výbu¹ninami za úèelem vytvoøení cesty k východu. Ka¾dá z nich má inventáø, který obsahuje pøedmìty, které beru¹ka pøi svém pohybu herním polem získala. 
+\myparagraph{Zeï}  %\item[Zeï] \hfill \\
+Zeï je jedním ze statických prvkù, který má ve svém herním poli stálou pozici a nelze ho nijak odstranit. Beru¹ka se po zdech mù¾e volnì pohybovat.
+\myparagraph{Východ}  %\item[Východ] \hfill \\
+Cílem je dostat v¹echny beru¹ky do východu. Stejnì jako zeï je i východ umístìn stále na stejné pozici.
+\myparagraph{Bedna} % \item[Bedna] \hfill \\
+Bedna je základním herním prvkem, který beru¹ka tlaèí pøed sebou a vytváøí tak cestu k cíli. Poèet pøesouvaných beden je závislý na aktuální síle beru¹ky (podkapitola~\ref{section:weight}) a je mo¾né je odstranit pomocí výbu¹niny. Bedny lze také tlaèit po ¹ikmé podlaze a dostat je tak do vy¹¹í, èi ni¾¹í úrovnì herního pole. Podle váhy pak rozli¹ujeme bedny na lehké a tì¾ké.
+\myparagraph{Výbu¹nina}%\item[Výbu¹nina] \hfill \\
+Výbu¹nina je prvkem, který se po vìt¹inu èasu chová jako obyèejná bedna, av¹ak pokud je \uv{natlaèena} na nìkterou z beden, pak dojde k výbuchu. Bli¾¹í popis toho, jak výbuchy probíhají, je v podkapitole~\ref{section:explosive}.
+\myparagraph{Kámen}%\item[Kámen] \hfill \\
+Kámen pøedstavuje pøeká¾ku, kterou nelze posunout, av¹ak je mo¾né ho odstranit pomocí krompáèe, který mù¾e beru¹ka nalézt pøi prùchodu herním polem.
+\myparagraph{Voda}%\item[Voda] \hfill \\
+Voda je pro beru¹ku dal¹í pøeká¾kou. Pokud je v dané herní úrovni voda, pak musí beru¹ka s nejvìt¹í pravdìpodobností pod vodní hladinu, kde získá potøebný pøedmìt. Nìkdy se dokonce pod vodní hladinou nachází i východ z úrovnì, av¹ak v ka¾dém pøípadì beru¹ka potøebuje ¹norchl, aby se mohla potopit. Ten mù¾e stejnì jako krompáè získat pøi prùchodu herním polem. 
+\myparagraph{Krompáè}%\item[Krompáè] \hfill \\
+Krompáè je pøedmìt, který se pou¾ívá pro odstranìní kamene. Maximální poèet krompáèù, který mù¾e mít jedna beru¹ka v inventáøi, je 4. Po pou¾ití je krompáè odstranìn z inventáøe.
+\myparagraph{©norchl}%\item[©norchl] \hfill \\
+Beru¹ka ho potøebuje, aby se mohla potopit pod vodní hladinu. Pokud beru¹ka tento pøedmìt nemá ve svém inventáøi, pak je zamezeno jakémukoliv hernímu kroku, kterým by se beru¹ka mohla pod hladinu dostat.
+\myparagraph{Záva¾í}%\item[Záva¾í] \hfill \\
+Záva¾í dvojnásobnì zvy¹uje váhu beru¹ky. Toho se vyu¾ívá v situacích, kdy potøebujeme, aby se pod beru¹kou propadla podlaha. 
+\myparagraph{Hormonální vitamín}%\item[Hormonální vitamín] \hfill \\
+Pokud beru¹ka získá hormonální vitamín, pak získá dvojnásobnou sílu, co¾ ji následnì umo¾òuje pøed sebou tlaèit více beden.
+\myparagraph{Bortící se podlaha}%\item[Bortící se podlaha] \hfill \\
+Obèas se høe vyskytuje i podlaha, která se propadá pod vahou, která je nad ní naskladnìna. Bli¾¹í informace o vahách herních prvkù jsou uvedeny v podkapitole~\ref{section:weight}.
+\myparagraph{©ikmina}%\item[©ikmina] \hfill \\
+©ikmina je posledním z herních prvkù. Umo¾òuje beru¹ce sestoupit, èi vystoupit z/do vy¹¹í úrovnì herního pole. Zároveò je mo¾né po ¹ikminì pohybovat bednami a výbu¹ninami.
+
+\section{Váhy herních prvkù a síla beru¹ky}
+\label{section:weight}
+Ve høe hraje velkou roli váha, která je pøiøazena ka¾dému z prvkù. Ta rozhoduje o tom, zda je beru¹ka schopná posunout prvky, které se pøed ní nacházejí, a také o tom, zda se pod nimi nepropadne podlaha. Základní síla beru¹ky, resp. to, kolik váhy pøed sebou mù¾e tlaèit, jsou 2 váhové jednotky. S hormonálním vitamínem ve svém inventáøi je pak síla beru¹ky navý¹ena na 4 váhové jednotky. Bortící se podlaha nad sebou udr¾í pouze 1 váhovou jednotku a mù¾e na ni tedy být natlaèena lehká bedna, nebo si na ni mù¾e stoupnout beru¹ka, která ve svém inventáøi nemá záva¾í. Pøi pøekroèení váhy se podlaha propadne a objekty, které na ní byly naskládány, zmìní svou vertikální pozici tak, aby pod sebou mìly podklad. Zajímají nás pouze váhy prvkù, se kterými je mo¾né ve høe pohybovat. Pøehled dynamických prvkù a jejich vah je uveden v tabulce~\ref{table:weights}.
+
+\begin{table}
+\label{table:weights}
+\begin{center}
+    \begin{tabular}{ | l | l |}
+    \hline
+    \textbf{Prvek} & \textbf{Váha} \\ \hline
+    Beru¹ka & 1 \\ \hline
+    Lehká bedna & 1 \\ \hline
+    Tì¾ká bedna & 2 \\ \hline
+	Výbu¹ná bedna & 2 \\ \hline
+    \end{tabular}
+
+\end{center}
+\caption{Váhy dynamických prvkù}
+\end{table}
+
+\section{Posuvy beden}
+Bedny jsou ve høe na rùzných pozicích a èasto jsou umístìny za sebou. O tom, zda beru¹ka mù¾e provést posuv jedné èi více beden rozhoduje více faktorù. 
+
+\begin{itemize}
+\item Aktuální beru¹èina síla. 
+\item Obsah pozice za poslední posouvanou bednou.
+\item Souèet vah posouvaných beden.
+\end{itemize} 
+
+Pokud uva¾ujeme posuv jedné jediné bedny, pak je situace jednoduchá. Zjistí se obsah pozice, kam má být bedna posunuta, a pokud je tato pozice prázdná, pak se posun provede. Pøi posuvu více beden najednou je potøeba spoèítat souhrnnou váhu posouvaných beden a urèit obsah pozice, na kterou bude posunuta od beru¹ky nejvzdálenìj¹í z nich. Jakmile má beru¹ka dostateènou sílu k posunu a koneèná pozice je prázdná, pak je posun proveden. V opaèném pøípadì zùstává beru¹ka i bedny na svém pùvodním místì.
+
+Je také dùle¾ité zdùraznit, ¾e bedny mohou být posunuty do míst, kde pod sebou nemají ¾ádný podklad. V takových situacích je pozice tìchto beden upravena tak, aby pod sebou mìly nìjaký prvek.
+
+\section{Výbu¹né bedny}
+\label{section:explosive}
+Výbu¹nými bednami lze ve vìt¹inì situací normálnì pohybovat. Zmìna nastává v pøípadì, kdy je pøed výbu¹ninou bedna obyèejná. V takové situaci je na ni výbu¹ná bedna \uv{nasunuta} a dochází k výbuchu. Pøi výbuchu jsou obì bedny odstranìny a je upravena vertikální pozice prvkù, které se nad nimi pøed výbuchem nacházely. Posouvanými prvky mohou být dal¹í výbu¹né bedny a ty pøi posunu v¾dy odstraní obyèejné, které se nacházejí pod nimi. 
+
+Na diagramu~\ref{fig:bangDiagram} je ukázka komplexního výbuchu. Váha beden zde znaènì pøesahuje beru¹èinu sílu, av¹ak za výbu¹nou bednou do které beru¹ka tlaèí je bedna obyèejná. Dojde tedy k výbuchu, odstranìní beden a \uv{pádu} tìch, které se nad nimi nacházely. Pøi pádu jsou odstraòovány bedny, které nad sebou mají výbu¹ninu a zbude pouze jediná. Ta se nakonec bude nacházet pøímo pøed beru¹kou, která zùstává na své pùvodní pozici.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{bangDiagram}
+\caption{Ukázka komplexního výbuchu}
+\label{fig:bangDiagram}
+\end{figure}
+
+\section{Ovládání}
+Beru¹ky jsou vybírány pomocí kláves \keystroke{1} a¾ \keystroke{5} a je s nimi pohybováno pomocí ¹ipek. Dùle¾ité je ovládání kamery, která rotuje kolem momentálnì vybrané beru¹ky pohybem my¹i na okraj herní obrazovky. Pokud nemá u¾ivatel pøímou viditelnost na vybranou beru¹ku, pak mù¾e objekty, které se mezi ním a beru¹kou nacházejí, nechat zprùhlednit pomocí mezerníku. Tlaèítkem \Enter je pak pozice kamery pøesunuta nad herní pole. 
+
+\section{Vykreslování}
+\label{section:navrhVykreslovani}
+Informace týkající se technologie vykreslování jsou uvedeny v následujícím odstavci. Jejich pøítomnost nech» ètenáø bere pouze jako zajímavost, jeliko¾ implementace hry, která je souèástí této práce, probíhala nezávisle na høe pùvodní. Jediným pøevzatým materiálem byla, jak se ètenáø dále dozví, data pro zobrazení herní úrovnì. 
+
+V pùvodní høe je celá scéna organizována jako strom hierarchických OBB obálek. Pøi vykreslování je pak strom procházen a je zji¹»ována viditelnost jednotlivých obálek. Osvìtlovací model je kombinovaný z per-vertex shadingu a lightmap. Hra obsahuje také mnohé animace, které jsou u beru¹ek realizovány jako objektové a pro zbytek objektù scény jako mesh animace. Aktuálnì vyvíjená open-source varianta hry obsahuje také napøíklad zrcadlový rendering, kreslení odleskù, halo efekty, anisotropické filtrování textur, bump-mapping, komprimované textury a mip-mapping. Informace o uvedených technologiích vykreslování zde nebudou z dùvodu omezeného rozsahu této práce uvedeny.
+
+\section{Návrh webu}
+Implementace této èásti nebyla pøímou souèástí této práce, a proto jejímu návrhu nebude vìnován velký prostor. Návrh webu je mo¾né vidìt na diagramu~\ref{fig:web}. Web je rozdìlen na 3~èásti a jejich popis se nachází v následujících odstavcích.
+
+
+\subsection*{Menu}
+Pomocí menu se volí kontexty obrazovky (viz. dále).
+\subsection*{Obrazovka} Obrazovka je primárnì urèena k zobrazení aktuálnì naètené herní úrovnì. Pro ucelenost webu je v¹ak obrazovka vyu¾ita i k zobrazení dal¹ích informací a lze tedy rozpoznávat její jednotlivé kontexty. Tìmi jsou:
+	\begin{itemize}
+	\item Hra
+
+\item Informace o høe
+\item Návod na hraní hry
+\item Popis ovládání hry
+	\end{itemize}
+Pøi volbì herního kontextu se v rámci obrazovky zobrazí samotný element \texttt{<canvas>}, do kterého je vykreslována zvolená herní úroveò. V levém dolním rohu je zobrazen inventáø aktuálnì vybrané beru¹ky a v rohu pravém je mo¾né ovládat pøehrávání herní hudby. Reakce na události vytváøené hráèem jsou zpracovány a o nìkterých z nich je zobrazena notifikace, která tak dává hráèi zpìtnou vazbu. 
+\subsection*{Výbìr herních úrovní}
+Tato èást umo¾òuje u¾ivateli vybrat z dostupných herních úrovní, které jsou následnì vykreslovány do herního kontextu obrazovky. Mezi jednotlivými bloky pro výbìr úrovnì lze pøecházet poklikem na ¹ipky. Pøi jednom pokliku jsou úrovnì posunuty o jeden blok a pøi pokliku dvojitém pak o bloky 4. Výbìr by nemìl obtì¾ovat hráèe v okam¾iku, kdy není potøeba. Proto je mo¾né ho otevøít/skrýt pomocí tlaèítka, které je umístìno ve spodní èásti obrazovky.
+
+

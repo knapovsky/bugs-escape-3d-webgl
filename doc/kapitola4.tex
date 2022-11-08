@@ -1,0 +1,529 @@
+\chapter{Implementace}
+\label{chap:implementace}
+V kapitole~\ref{chap:analysis} byla analyzována hra Beru¹ky 2, která se stala vzorem pro hru implementovanou v rámci této práce. Zpùsob, jakým je hra implementována, je uveden na diagramu~\ref{fig:gameDiagram}. V následující podkapitolách budou popsány jeho jednotlivé èásti a tím i objasnìna herní architektura.
+
+TODO...jak byla testovana funkcnost
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{gameDiagram}
+\caption{Architektura hry Beru¹ky 2 WebGL}
+\label{fig:gameDiagram}
+\end{figure}
+
+\section{Inicializace}
+Inicializace elementu \texttt{<canvas>} je prvním krokem, který je potøeba vykonat. Tím, ¾e získáme referenci na jeho \texttt{webgl} kontext, mù¾eme pøejít k dal¹ímu kroku, který nastaví vertex a fragment shadery. Popis funkènosti shaderù je proveden pomocí jazyka GLSL, jeho¾ ukázky byly uvedeny u popisu grafické pipeline (\ref{subsection:pipeline}). Zdrojové kódy jsou obsa¾eny v HTML dokumentu uvnitø tìchto elemtentù:
+\begin{itemize}
+\item Vertex Shader \\ \texttt{\textless script id="per-fragment-lighting-vs"\ type="x-shader/x-vertex"\textgreater}
+\item Fragment Shader \\ \texttt{\textless script id="per-fragment-lighting-fs"\ type="x-shader/x-fragment"\textgreater}
+\end{itemize}
+
+V implementaci je hra inicializována pomocí funkce \texttt{webGLStart()}, která mimo jiné nastavuje zpùsob zpracování událostí vytváøených u¾ivatelem.
+
+\section{Nahrání vybrané úrovnì}
+Po inicializaci je pøistoupeno k nahrání úrovnì vybrané hráèem. Ka¾dá z úrovní je pøedstavována samostatným JSON souborem, který je asynchronnì nahrán (\ref{subsection:AJAX}) ze serveru.
+
+\subsection*{JSON soubor}
+\label{subsection:navrhJSON}
+Tento soubor obsahuje kompletní informace, které jsou potøebné pro zobrazení dané herní úrovnì. Jedná se tak o hlavní souèást celé hry, bez které by nemohla fungovat. Soubor vzniká exportem potøebných informací z pùvodní hry a jeho hlavní souèásti jsou popsány v následujících odstavcích.
+
+\myparagraph{Informace o materiálech}
+Materiály jsou pou¾ity k otexturování modelù. Rozdíl mezi materiálem a texturou je takový, ¾e materiál se obecnì mù¾e skládat z více textur, které se pak vzájemnì prolínají. Lze tak mít napøíklad materiál, který vznikne slo¾ením z textur zdi a mechu. Výhoda je v tom, ¾e slo¾itìj¹í textury lze slo¾it z jednodu¹¹ích a není tedy potøeba uchovávat nadbyteèná data. Ka¾dý z materiálù má v souboru jména textur, ze kterých se skládá, a také své unikátní jméno, pomocí nìho¾ se následnì objekty scény na tento materiál odkazují. Ukázka popisu materiálu je uvedena ve zdrojovém kódu~\ref{code:jsonMaterial}.
+
+\begin{lstlisting}[caption=Objekt \texttt{material} vstupního souboru JSON,label=code:jsonMaterial]
+{
+  "type" : "material",
+  "name" : "256_p-d1-256",
+  "transparent" : "0",
+  "z_buffer_mask" : "1",
+  "z_buffer_test" : "1",
+  "backface_culling" : "1",
+  "diffuse_color" : "1",
+  "specular_color" : "0",
+  "textures" : [ "s1_0013.jpg" ]
+}
+\end{lstlisting}
+
+\myparagraph{Obálky objektù herní scény}
+Málokterý ze slo¾itìj¹ích objektù je slo¾en pouze z jednoho modelu. Ve chvíli, kdy celkový model objektu rozdìlíme na èásti, je mo¾né tyto èásti samostatnì transformovat èi mìnit materiál, který pou¾ívají. Av¹ak v okam¾ik, kdy chceme nìjakým zpùsobem transformovat celý objekt, je vhodné mít v¹echny modely objektu v jakési obálce. Tato obálka má v souboru své identifikaèní èíslo, které slou¾í k identifikaci v¹ech jejích modelù. Identifikaèní èíslo je potøebné pouze tehdy, pokud potøebujeme s obálkou transformace provádìt a je tedy vyu¾ito pouze u dynamických objektù herní plochy.
+
+\mysubparagraph{Modely}
+Modely jsou v souboru reprezentovány strukturami, které obsahují informace o poloze modelù v rámci scény, o jejich barvì èi napøíklad o materiálech, které jsou jim pøiøazeny. Nìkteré z modelù mají také dal¹í textury s pøedpoèítanými stíny pro realistiètìj¹í zobrazení scény - lightmapy. 
+
+Ve zdrojovém kódu~\ref{code:jsonContainer} je uveden zjednodu¹ený popis obálky, která obsahuje 1 model. Identifikaèní èíslo \texttt{2} znamená, ¾e se jedná o dynamický prvek scény (pokud by se jednalo o statický prvek, pak by èíslo bylo \texttt{-1}). Pomocí polo¾ky \texttt{material} se model v tomto pøípadì odkazuje na materiál, který byl popsán ve zdrojovém kódu~\ref{code:jsonMaterial}. Trojice prvkù v poli \texttt{vertexPositions} v¾dy udává pozici vertexu ve scénì. O tom, které vertexy nále¾í geometrickým primitivám, ze kterých je model slo¾en, rozhoduje pole \texttt{indices}. Zbylé polo¾ky pak obsahují informace potøebné pro správné namapování materiálù a lightmap.
+
+\begin{lstlisting}[caption=Objekt \texttt{geometry\_container} vstupního souboru JSON,label=code:jsonContainer]
+{
+  "type" : "geometry_container",
+  "name" : "exit.b2m",
+  "container_id" : "2",
+  "poly_id" : "17",
+  "prvek" : "1",
+  "geometry_objects" : [
+   {
+    "name" : "exit.b2m",
+    "material" : "256_p-d1-256",
+    "vertexPositions" : [-27.586000,2.008000,-34.421001,-27.586000,0.008000,-36.421001,
+         47.704437,85.772964,6.669896,130.704437,85.772964,-3.330104],
+    "vertexNormals" : [-1.000000,0.000000,0.000000,-1.000000,0.000000,0.000000],
+    "vertexTextureCoords0" : [1.000000,1.000000,0.000000,0.000000,1.000000,0.000000],
+    "vertexTextureCoords1" : [1.000000,1.000000,0.000000,0.000000,1.000000,0.000000],
+    "vertexTextureCoordsLight" : [0.140625,0.328125,0.171875,0.328125,0.156250,0.359375],
+    "indices" : [0,1,2,3,0,5]
+   }
+  ]
+}
+\end{lstlisting}
+
+\myparagraph{Logická reprezentace herního pole}
+Obálky modelù neobsahují ¾ádnou informaci o tom, jaký typ objektu ve scénì pøedstavují. Z tohoto dùvodu je nutné rozli¹it to, co je vykreslováno na obrazovku, a s èím pracuje logika hry. Jak ji¾ bylo uvedeno v kapitole~\ref{chap:analysis}, herní pole je krychlové èi kvádrové a je slo¾eno z jednotlivých pozic, na kterých se mohou nacházet herní prvky. Je to právì logická reprezentace herního pole, která obsahuje informace o tom, který prvek se na které pozici nachází. Ka¾dý prvek logické reprezentace herního pole má opìt své identifikaèní èíslo, pomocí kterého se odkazuje na obálku modelu, který urèuje jeho vzhled.  
+
+Ve zdrojovém kódu~\ref{code:jsonLogic} je uveden popis herního pole o velikosti $6\times6$ a vý¹ce $8$. Polo¾ka \texttt{level\_start} udává pozici, na kterou mají být pøesunuty dynamické objekty, které jsou normálnì umístìny v poèátku souøadného systému scény. Herní pole zde obsahuje pouze jeden prvek, jeho¾ typ je urèen polo¾kami \texttt{class} a \texttt{subclass} (identifikátory v¹ech prvkù jsou uvedeny v tabulce~\ref{table:itemClass}). Logický prvek se v tomto pøíkladu pomocí \texttt{container\_id} odkazuje na model, který byl popsán ve zdrojovém kódu~\ref{code:jsonContainer}. 
+
+\label{code:jsonLogic}
+\begin{lstlisting}
+{
+  "type" : "level_logic",
+  "logic_level_size" : [ 6, 8, 6],
+  "level_start" : [ 21.586000, -1.992000, -46.421001],
+  "item_size" : "2",
+  "level_items_num" : "1",
+  "level_items" : [{
+    "name" : "Exit - teleport - 1",
+    "guid" : "4000",
+    "class" : "4",
+    "subclass" : "-1",
+    "position" : [ 0, 5, 1 ],
+    "rotation" : "0",
+    "container_id" : "2"
+  }]
+}
+\end{lstlisting}
+
+\begin{table}
+\label{table:itemClass}
+\begin{center}
+\begin{tabular}{ | l | l | l |}
+\hline
+\textbf{Prvek} & \textbf{itemClass} & \textbf{itemSubclass} \\ \hline
+Beru¹ka & 1 & 0 \\ \hline
+Zeï & 2 & 0 \\ \hline
+Východ & 4 & 0 \\ \hline
+Bedna & 5 & 0 \\ \hline
+Tì¾ká bedna & 5 & 0 \\ \hline
+Lehká bedna & 5 & 1 \\ \hline
+Výbu¹nina & 6 & 0 \\ \hline
+Kámen & 7 & 0 \\ \hline
+Voda & 12 & 0 \\ \hline
+©norchl & 13 & 0 \\ \hline
+Hormonální vitamín & 13 & 5 \\ \hline
+Záva¾í & 13 & 7 \\ \hline
+Krompáè & 13 & 8 \\ \hline
+Bortící se podlaha & 15 & 0 \\ \hline
+©ikmina & 19 & 0 \\ \hline
+\end{tabular}
+\end{center}
+\caption{Tøídy a podtøídy prvkù herního pole}
+\end{table}
+
+Jak si mohl pozorný ètenáø v¹imnout, èísla, která oznaèují typ prvku, nejdou sekvenènì za sebou. Je to zpùsobeno tím, ¾e pùvodní návrh hry Beru¹ky 2 (desktopové verze) obsahoval více typù herních prvkù, ne¾ jich bylo nakonec implementováno. 
+
+\section{Vytvoøení vnitøní reprezentace herní úrovnì}
+Ka¾dé struktuøe vyskytující se v JSON souboru (popsáno v~\ref{subsection:navrhJSON}) pøíslu¹í odpovídající objekty a po jeho asynchronním naètení je soubor zpracován pomocí funkce \texttt{handleLoadedJSON}. Ta tento soubor sekvenènì prochází, rozpoznává jeho jednotlivé struktury a následnì pomocí JavaScriptových konstruktorù vytváøí odpovídající objekty, se kterými hra pracuje. V následujících odstavcích je uveden pøehled tìchto konstruktorù s jejich struèným popisem.
+
+\myparagraph{\texttt{Material}}
+Pøi vytváøení objektu tímto konstruktorem jsou ze serveru asynchronnì (\ref{subsection:AJAX}) nahrány textury, které materiál vyu¾ívá. Z tìch jsou následnì vytvoøeny texturovací buffery, které jsou nahrány do grafické pamìti. Tím, ¾e jsou do této pamìti umístìny, je pak dosa¾eno rychlej¹ího vykreslování celé herní scény. Buffery jsou nastaveny tak, ¾e pokud je textura oproti své pùvodní velikosti zvìt¹ována (upscaling), pak se pou¾ije lineární filtr, který na základì okolních pixelù dopoèítá lineární interpolací barvu pixelu mezi nimi. Pro textury, které jsou naopak zmen¹ovány je vygenerována mipmapa, ze které se pak vybírá nejvhodnìj¹í verze textury. V¹echny materiály jsou uchovávány v asociativním poli \texttt{materials}, kde jednotlivé klíèe tohoto pole jsou samotné názvy materiálù. 
+
+Ve zdrojovém kódu~\ref{code:loadingMaterial} je uveden pøíklad nahrání texturovacího bufferu vzniklého naètením první textury materiálu uvedeného ve zdrojovém kódu~\ref{code:jsonMaterial} do grafické pamìti.
+
+\begin{lstlisting}[caption=Pøíklad nahrání textury do grafické pamìti,label=code:loadingMaterial]
+// ...	
+// Textura je zrcadlovì obrácena kolem osy Y
+// WebGL pou¾ívá jiný souøadný systém
+gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+// Nastavení aktuálnì zpracovávaného bufferu textury
+gl.bindTexture(gl.TEXTURE_2D, materials["256_p-d1-256"].buffers[0]); 
+// Nahrání textury do grafické pamìti
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, 
+              that.textures[temp].image);
+// Nastavení filtru, kterým bude textura zvìt¹ována
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+// Nastavení filtru, kterým bude textura zmen¹ována
+gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, 
+                 gl.LINEAR_MIPMAP_NEAREST);
+// Vygenerování mipmapy
+gl.generateMipmap(gl.TEXTURE_2D);
+// ...
+\end{lstlisting}
+
+\myparagraph{\texttt{Lightmap}}
+Objekt vytvoøený tímto konstruktorem je a¾ na pár detailù stejný jako objekt konstruktoru \texttt{Material}. Lightmapy jsou takté¾ naèítány asynchronnì a ukládány do pamìti grafické karty, av¹ak vzhledem k tomu, ¾e se z pùvodní hry nepodaøilo v¹echny lightmapy vyexportovat, je jejich pou¾ití vypnuto.
+
+\myparagraph{\texttt{GeometryContainer}}
+\label{paragraph:obálky}
+Tento konstruktor vytváøí obálku jednotlivých modelù herní scény. Podle toho, zda obálka obsahuje identifikaèní èíslo, rozli¹ujeme mezi obálkami dynamických a statických objektù scény a umís»ujeme je do odpovídajících polí. Pro dynamické obálky je to asociativní pole \texttt{dynamicItems}, jeho¾ klíèi jsou identifikátory obálek a pro statické obálky je to pole staticItems, kde jsou obálky seøazeny tak, jak byli naèítány ze vstupního souboru. Ka¾dá z obálek ve svém poli \texttt{objects} uchovává modely, které jí nále¾í. 
+
+\myparagraph{\texttt{GeometryObject}} 
+Objekt vytvoøený tímto konstruktorem obsahuje ve¹keré informace spojené s vykreslováním modelu. Dùle¾ité je to, ¾e jsou zde ulo¾eny buffery, do kterých jsou nahrány informace o pozicích vertexù, smìrech jejich normál a dále pak napøíklad o souøadnicích potøebných pro správné namapování materiálu. Ve zdrojovém kódu~\ref{code:vertexBuffer} je uveden pøíklad nahrání pozic vertexù ze struktury, která v JSON souboru reprezentuje naèítaný model.
+
+\begin{lstlisting}[caption=Pøíklad nahrání pozic vertexù do bufferu,label=code:vertexBuffer]
+// Vytvoøení vertex position bufferu
+this.vertexPositionBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPositionBuffer);
+// Naètení dat z JSON souboru
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(model.vertexPositions), 
+              gl.STATIC_DRAW);
+this.vertexPositionBuffer.itemSize = 3;
+this.vertexPositionBuffer.numItems = model.vertexPositions.length / 3;
+\end{lstlisting}
+
+\myparagraph{\texttt{Logic}}
+\label{paragraph:logic}
+Objekt tohoto konstruktoru obsahuje ve¹keré informace spojené s herním polem a také ve¹kerou herní logiku. Prvky herního pole jsou reprezentovány objekty konstruktoru \texttt{LogicItem}. Vzhledem ke svému rozsahu je tento objekt popsán samostatnì v podkapitole~\ref{section:implementationLogic}.
+
+\myparagraph{\texttt{LogicItem}}
+Objekty pøedstavují jednotlivé herní prvky, které obsahují informace o jejich typu, pozici a aktuálním natoèení. Ka¾dý z prvkù má své unikátní identifikaèní èíslo, které slou¾í k propojení s obálkou jeho modelu.
+
+\section{Herní logika a podnìty u¾ivatele}
+\label{section:navrhLogika}
+V implementované høe je ka¾dý podnìt u¾ivatele zpracováván herní logikou, která je implementována na základì analýzy hry Beru¹ky 2 provedené v kapitole~\ref{chap:analysis}. Pro vyhodnocení podnìtu u¾ivatele je volána funkce \texttt{gameStep()}. Ta pøedstavuje herní krok, ve kterém je v¾dy zji¹tìna pozice aktuálnì zvolené beru¹ky a dle jejího natoèení se pak urèí pozice, na kterou hodlá pøejít. Podle toho, jaký typ prvku se na následující pozici nachází, jsou vykonávány akce, jejich¾ popis je uveden v následujícím pøehledu.
+
+\begin{itemize}
+\item \textbf{Nic} - pokud je beru¹ka v nejni¾¹í úrovní herního pole, pak je krok proveden. Pokud ne, pak je nejdøíve zkontrolován obsah pozice, která je pod místem, kam hodlá beru¹ka pøejít.
+\begin{itemize}
+\item Pod místem je \textit{¹ikmina}. Pokud je ¹ikmina správnì natoèena, pak se je¹tì zkontroluje, zda nevede ¹ikmina pod vodní hladinu, kde by beru¹ka potøebovala ¹norchl. Pøi splnìní v¹ech podmínek je krok následnì proveden.
+\item Pod místem je \textit{bortící se podlaha}. Ta se propadne pouze v pøípadì, ¾e má beru¹ka ve svém inventáøi záva¾í.
+\item Pod beru¹kou je jiná \textit{beru¹ka} - pøechod se neprovede.
+\item Pokud zde není \textit{¾ádná pevná plocha}, na které by beru¹ka mohla stát (zeï, bedna, východ, výbu¹nina èi kámen), pak se krok neprovede. 
+\end{itemize}
+\item \textbf{Beru¹ka} - krok se neprovede, jinou beru¹kou nelze pøímo pohnout.
+\item \textbf{Zeï} - krok se neprovede, zeï je statickým prvkem herního pole.
+\item \textbf{Východ} - beru¹ka opou¹tí herní pole. Pokud je to beru¹ka poslední, pak konèí hra.
+\item \textbf{Bedna} - zjistí se celková váha v¹ech posouvaných beden a pokud je ni¾¹í nebo rovna beru¹èinì síle, pak se bedna/bedny v daném smìru posouvají. Pokud pod sebou posunutá bedna nemá podklad, pak je její pozice upravena tak, aby ho pod sebou mìla.
+\item \textbf{Výbu¹nina} - zjistí se, co se nachází na pozici, kam by mìla být výbu¹nina posunuta. Pokud je na následující pozici bedna, pak je výbu¹nina i bedna odstranìna a beru¹ka zùstává na své pùvodní pozici. Pokud za výbu¹ninou není bedna, pak se stejnì jako bedna posune.
+\item \textbf{Kámen} - prohledá se inventáø beru¹ky a pokud obsahuje krompáè, pak je kámen odstranìn s tím, ¾e beru¹ka zùstává na své pùvodní pozici. V opaèném pøípadì se krok neprovede.
+\item \textbf{©norchl} - beru¹ka mù¾e vlastnit pouze jeden. Pokud ho tedy je¹tì ve svém inventáøi nemá, pak se ¹norchl odstraní z herního pole, pøidá se do beru¹èina inventáøe a ta samotná je posunuta na pozici, kde se ¹norchl nacházel.
+\item \textbf{Hormonální vitamín} - situace je obdobná jako u ¹norchlu.
+\item \textbf{Záva¾í} - opìt stejná situace jako u ¹norchlu.
+\item \textbf{Krompáè} - krompáè se odstraní a pøidá se do inventáøe pouze v pøípadì, ¾e v nìm má beru¹ka místo. Maximální poèet krompáèù, který mù¾e mít beru¹ka v jeden okam¾ik v inventáøi je 4.
+\item \textbf{Bortící se podlaha} - mù¾e se nacházet i pøed beru¹kou, av¹ak krok který by vedl k tomu, ¾e by beru¹ka byla pod podlahou se neprovede.
+\item \textbf{©ikmina} - zde opìt zále¾í na natoèení ¹ikminy. Vzhledem k tomu, ¾e se nad ¹ikminou mù¾e nacházet jakýkoliv jiný herní prvek, je krok pøi správném natoèení ¹ikminy rozdìlen na 2 fáze. Nejprve je beru¹ka pro potøeby výpoètu pøesunuta nad ¹ikminu a následnì je krok provádìn z tohoto umístìní. 
+\end{itemize}
+
+Je také dùle¾ité pøipomenout, ¾e pøi ka¾dém posunu prvkù je potøeba zkontrolovat, zda se posunem nedostaly do místa, kde by levitovaly ve vzduchu. Pozice se musí upravit s tím, ¾e pokud se v novì vzniklém sloupci prvkù nachází nìkteré výbu¹né bedny, pak pøi úpravì vertikální polohy sloupce výbu¹né bedny odstraòují normální bedny, které mají pod sebou. Stejnì tak je potøeba kontrolovat, zda se v novì vzniklém sloupci prvkù nenachází bortící se podlaha. Pokud je váha nad bortící se podlahou vy¹¹í jak 1, pak je bortící se podlaha odstranìna a sloupec objektù je vertikálnì posunut.
+
+\subsection*{Objekt herní logiky}
+\label{section:implementationLogic}
+Pøi vytvoøení tohoto objektu jsou z JSON souboru naèteny potøebné informace a podle nich jsou pak dopoèítány ty zbylé. Prvky herního pole se stejnì jako obálky modelù (\ref{paragraph:obálky}) dìlí na statické a dynamické a jsou ulo¾eny v odpovídající polích \texttt{staticItems} a \texttt{dynamicItems} tohoto objektu (neplést s poli urèenými pro obálky modelù, které jsou ulo¾eny v globálních polích se stejnými názvy). Statické prvky jsou indexovány pomocí èísla, které je odvozeno z poøadí pøi jejich naèítání. Dynamické prvky jsou naopak indexovány svým identifikaèním èíslem. 
+
+Jak ji¾ bylo uvedeno v~\ref{paragraph:logic}, tento objekt obsahuje ve¹kerou herní logiku v podobì funkcí, které jsou rozdìleny do nìkolika kategorií. Kategorie a odpovídající komentované pøehledy jsou uvedeny v tabulce~\ref{table:logicCategories}.
+
+\begin{table}
+\label{table:logicCategories}
+\begin{center}
+\begin{tabular}{ | l | l |}
+\hline
+\textbf{Kategorie} & \textbf{Zdrojový kód} \\ \hline
+Práce s beru¹kami & \ref{code:logicBug} \\ \hline
+Práce s inventáøem & \ref{code:logicInventory}\\ \hline
+Získávání reference na prvky & \ref{code:logicReference}\\ \hline
+Výpoèet váhy prvkù & \ref{code:logicWeight} \\ \hline
+Posun prvkù & \ref{code:logicMove} \\ \hline
+Odstraòování prvkù & \ref{code:logicRemove} \\ \hline
+Herní krok & \ref{code:logicGameStep}\\ \hline
+\end{tabular}
+\end{center}
+\caption{Kategorie funkcí herní logiky}
+\end{table}
+
+\begin{lstlisting}[caption=Funkce pro práci s beru¹kami,label=code:logicBug]
+/**
+* Vybere beru¹ku s daným ID.
+* @param id ID beru¹ky, která má být vybrána
+*/
+function selectBug(id) {/*...*/}
+/** 
+* Vybere následující beru¹ku.
+*/
+function selectNextBug() {/*...*/}
+/**
+* Odstraní beru¹ku z hracího pole.
+* Po odstranìní poslední beru¹ky konèí hra.
+* @param id ID beru¹ky, která má být odstranìna
+*/
+function removeBug(id){/*...*/}
+/**
+* Posune beru¹ku na zadanou pozici a navíc
+* zjistí, zda se pod beru¹kou nenacházelo propadlo.
+* Pokud ano, pak se zjistí aktuální váha nad propadlem
+* a propadlo se pøípadnì odstraní.
+* @param id Identifikaèní èíslo beru¹ky
+* @param position Pozice, na kterou má být beru¹ka pøesunuta
+*/
+function moveBug(id, position){/*...*/}
+\end{lstlisting}
+
+\pagebreak
+
+\begin{lstlisting}[caption=Funkce pro práci s beru¹èiným inventáøem,label=code:logicInventory]
+/**
+* Ovìøí, zda se v inventáøi beru¹ky nachází daný pøedmìt.
+* @param bugID Identifikaèní èíslo beru¹ky
+* @param itemSubclass Podtøída vyhledávaného pøedmìtu
+* @return -1 pokud nebyl pøedmìt nalezen, nebo pozici pøedmìtu v inventáøi
+*/
+function inventoryContains(bugID, itemSubclass){/*...*/}
+/**
+* Pøidá pøedmìt do beru¹èina inventáøe.
+* @param bugID Identifikaèní èíslo beru¹ky
+* @param itemSubclass Podtøída pøidávaného pøedmìtu
+*/
+function inventoryAppend(bugID, itemSubclass){/*...*/}
+/**
+* Odebere pøedmìt z beru¹èina inventáøe.
+* @param bugID Identifikaèní èíslo beru¹ky
+* @param itemPosition Pozice odebíraného pøedmìtu v inventáøi
+*/
+function removeFromInventory(bugID, itemPosition){/*...*/}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Funkce pro získávání reference na prvky herního pole,label=code:logicReference]
+/** 
+* Získá referenci na prvek hracího pole, který se nachází na dané pozici.
+* @param position Pozice prvku
+*/
+function getObjectOnPosition(position) {/*...*/}
+/** 
+* Získá referenci na prvek hracího pole s daným ID.
+* @param id Identifikátor prvku.
+*/   
+function getObjectByID(id) {/*...*/}
+/** 
+* Získá pozici prvku se zadaným id.
+* @param id Identifikátor prvku
+*/
+function getPositionOfObject(id) {/*...*/}  
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Funkce pro výpoèet váhy objektù,label=code:logicWeight]
+/**
+* Získá váhu prvku na zadané pozici.
+* Jakmile se jedná o statický prvek, pak jeho váha 1000.
+* @param position Pozice objektu
+*/
+function getWeightOfObject(position) {/*...*/}    
+/** 
+* Vypoèítá váhu sloupce od zadané pozice nahoru.
+* @param position Pozice, od které má výpoèet probíhat
+*/
+function getWeightOfColumn(position){/*...*/}  
+/** 
+* Seète váhu herních prvkù v daném smìru. Pracuje rekurzivnì.
+* @param direction Smìr - up, right, down, left
+* @param position Pozice od, které má být výpoèet proveden
+*				  obvykle pozice, na následující pozice beru¹ky
+*/
+function countWeight(direction, position){/*...*/} 
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Funkce pro posun objektù,label=code:logicMove]
+/**
+* Posune prvek herního pole a s ním i v¹echny
+* prvky, které se nachází nad ním.
+* Jakmile je posun ukonèen, jsou upraveny vekrtikální pozice
+* prvkù tak, aby pod sebou mìli podklad.   
+function moveObject(direction, tempObject){/*...*/}
+/**
+* Rekurzivnì posouvá prvky herníno pole.
+* K posuvu vyu¾ívá funkci moveObject a je volána
+* teprve tehdy, kdy¾ u¾ je jisté, ¾e prvky lze
+* posunout - nejdøíve se poèítá váha posouvaného bloku
+* @param direction Smìr posunu - up, right, down, left
+* @param position Pozice, od které má být posuv proveden
+*                 Obvykle následující pozice beru¹ky
+*/ 
+function moveAction(direction, position){/*...*/}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Funkce pro odstraòování objektù,label=code:logicRemove]
+/**
+* Odstranní prvek herního pole.
+* Nejprve je odstranìn model prvku a poté jeho záznam v logické reprezentaci.
+* @param item Reference na prvek, který má být odstranìn
+*/
+function removeItem{/*...*/}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Funkce herního kroku gameStep,label=code:logicGameStep]
+/**
+* Ve¹kerý pohyb ve høe je zprostøedkován pomocí této funkce.
+* Vypoèítá následující pozici beru¹ky, urèí typ pøedmìtu na této
+* pozici a podle typu se rozhoduje, jaké kroky provést.
+*
+* Tato funkce pøijímá jeden z parametrù.
+* Buï je jím smìr, kterým se aktuálnì vybraná beru¹ka má vydat,
+* nebo je to pøímo pozice, na kterou hodlá beru¹ka pøejít.
+* Pøímé pozice je vyu¾ito napøíklad u ¹ikminy, kde beru¹ka nemìní
+* svou pozici pouze o 1 krok, av¹ak je nutné beru¹ku posunout nad/pod
+* ¹ikminu. 
+* @param direction Smìr, kterým se vybraná beru¹ka vydává.
+* @param newBugPositionIn Pozice, na kterou se beru¹ka chystá jít.
+*/
+function gameStep(direction, newBugPositionIn) {/*...*/}
+\end{lstlisting}
+\pagebreak
+\section{Ovladání}
+Hra je ovládána pomocí klávesnice a my¹i. Pøi stisku jakékoliv klávesy je zji¹tìn její kód, kterým je identifikována v rámci JavaScriptu a dle tohoto kódu je provádìna pøíslu¹ná akce.
+
+Existují dva zpùsoby, kterými lze reagovat na stisknuté klávesy: 
+\begin{itemize}
+\item Reagovat ihned na událost stisku klávesy,
+\item Pravidelnì kontrolovat aktuálnì stisknuté klávesy a provádìt pøíslu¹né operace.
+\end{itemize}   
+
+Pro u¾ivatele je rozdíl takový, ¾e pokud dr¾í klávesu, tak v prvním pøípadì ji¾ po první reakci nenásledují ¾ádné dal¹í. V pøípadì druhém se pak akce opakovanì provádìjí do té doby, dokud u¾ivatel klávesu dr¾í, av¹ak za tu cenu, ¾e nemusí být zachyceny v¹echny stisky kláves. Ze spolehlivostních dùvodù je tedy v implementaci zvolen první zpùsob reakce. 
+
+Klávesy a odpovídající akce na jejich stisk jsou uvedeny v tabulce~\ref{table:keys}.
+
+\begin{table}
+\label{table:keys}
+\begin{center}
+\begin{tabular}{ | l | l |}
+\hline
+\textbf{Klávesa} & \textbf{Akce klávesy}\\ %\hline
+\UArrow & Pohyb aktuálnì vybrané beru¹ky - provádìní herního kroku \\ %\hline
+\LArrow & Natoèení beru¹ky o 90\degree vlevo \\ %\hline
+\RArrow & Natoèení beru¹ky o 90\degree vpravo \\ %\hline
+\DArrow & Otoèení beru¹ky o 180\degree \\ %\hline
+\keystroke{1} & Výbìr beru¹ky 1 \\
+\keystroke{2} & Výbìr beru¹ky 2 \\
+\keystroke{3} & Výbìr beru¹ky 3 \\
+\keystroke{4} & Výbìr beru¹ky 4 \\
+\keystroke{5} & Výbìr beru¹ky 5 \\
+\keystroke{m} & Zmìna vykreslovacího módu \\ %\hline
+\keystroke{n} & Pøepíná mezi vykreslováním celé scény a samotného herního pole \\ %\hline
+\keystroke{c} & Zmìna typu kamery  \\ %\hline
+\keystroke{x} & Zapíná/vypíná zobrazení lightmap \\ %\hline
+\keystroke{l} & Zapíná/vypíná pou¾ití bodového svìtla \\ %\hline
+\keystroke{f} & Pøepíná mezi zobrazením pøes celou obrazovku a normálním zobrazením \\ %\hline
+\keystroke{o} & Zapíná/vypíná prùhlednost objektù \\ %\hline
+\keystroke{s} & Zapíná/vypíná zobrazení odleskù \\ %\hline
+\keystroke{r} & Restartuje herní úroveò \\ %\hline
+\Enter & Pøepíná mezi horním pohledem a pohledem normálním \\ \hline
+
+\end{tabular}
+\end{center}
+\caption{Ovládání hry pomocí klávesnice}
+\end{table}
+
+My¹í je ovládána kamera. Tlaèítko \keystroke{c} slou¾í k pøepínání rùzných typù kamery, kterými jsou: 
+
+Kamera má více mo¾ností zobrazení:
+
+\begin{itemize}
+\item Kamera s bodem otáèení kolem støedu herního pole
+\item Kamera s bodem otáèení kolem aktuálnì vybrané beru¹ky
+\item Pohled beru¹ky
+\item Pohled na záda beru¹ky
+\end{itemize}
+
+U prvních dvou typù zobrazení je kamera ovládána pomocí my¹i tak, jak mo¾né vidìt na diagramu~\ref{fig:web}. Herní obrazovka je rozdìlena na oblasti, které jsou citlivé na kurzor my¹i. Najetím kurzoru my¹i je následnì zmìnìn úhel rotace kamery a její elevace. U zbylých dvou typù kamery je rotace a elevace pevnì urèena aktuální pozicí a rotací beru¹ky. WebGL nemá pøímou podporu pro kameru. Výsledný pohled nevzniká tedy tak, ¾e by se transformovala pozice a natoèení kamery v rámci scény, av¹ak je vytvoøen tak, ¾e kamera je umístìna na pevné pozici a pohybuje se celou scénou. To, jakým zpùsoben je toto implementováno, je uvedeno v podkapitole~\ref{implementace:vykreslovani}. 
+
+\section{Vykreslování}
+\label{implementace:vykreslovani}
+Vykreslování probíhá periodicky s tím, ¾e modely scény jsou pøi vykreslování transformovány na základì aktuálních informací, které se nacházejí v logické reprezentaci herní úrovnì. Pùvodní hra obsahuje animace prvkù herního pole a svého okolí. V implementované høe animace nejsou obsa¾eny a v¹echny transformace objektù scény jsou tedy provádìny ihned po dokonèení herního kroku. Jedná se o zjednodu¹ení, které bylo odsouhlaseno ji¾ pøi zadávání projektu.  
+
+Vykreslování obstarává funkce \texttt{drawScene()}. Na poèátku této funkce je v¾dy vyèi¹tìn color a depth buffer a následnì je pøistoupeno k vytvoøení projekèní matice a matice kamery
+
+Projekèní matice je nastavena na úhel projekce 45\degree. Je v¹ak mo¾né ho po nastavení promìnné \texttt{useProjection} mìnit tlaèítky \keystroke{[} a \keystroke{]}. Reset projekèní matice se pak provádí pomocí tlaèítka \keystroke{'}. Dal¹í nastavení hry je uvedeno v podkapitole~\ref{section:nastaveni}.
+
+Matice kamery je sestavena na základì jejího aktuálnì zvoleného typu. Vytvoøení této matice se skládá z nìkolika krokù:
+
+\begin{itemize}
+\item Vytvoøení $4\times4$ matice identity \texttt{cameraMatrix}
+\item Translace této matice v osách X a Z - urèí se støed otáèení kamery
+\item Rotace kolem osy Y - aplikuje rotaci vlevo, nebo vpravo
+\item Rotace kolem osy X -  aplikuje aktuální elevaci
+\item Translace kolem osy Z - posune kameru od støedu otáèení.
+\end{itemize}
+
+Jeliko¾ není maticové násobení komutativní operací, je nutné provádìt transformace v tomto poøadí. Po sestavení matice kamery je vzhledem k tomu, ¾e pohybujeme scénou a ne kamerou, vytvoøena matice k ní inverzní. Tou je vynásobena tzv. \textit{model-view} matice, kterou jsou následnì násobeny v¹echny vertexy, které se ve scénì nacházejí. Vykreslování se øídí následujícím algoritmem.
+
+
+\pagebreak
+\begin{algorithmic}
+\label{algorithm:vykreslovani}
+\ForAll{(obálka in pole\_obálek)} \\ 
+Ulo¾ model-view matici
+\If{((frustrum culling) AND (obálka není viditelná ve frustru kamery))} \\ \quad \quad continue \EndIf
+\If{((obálka není souèástí herního pole) \&\& (není zobrazena celá scéna))} \\ \quad \quad continue \EndIf
+	\ForAll{(model in obálka)}
+		\If{((frustrum culling) AND (model je ve frustru kamery))} \\ \quad \quad \quad \quad continue \EndIf
+		\If{((model má prùhledný materiál) OR (je zapnut blending))} \\ \quad \quad \quad \quad pøidej objekt do pole \texttt{blendedObjects}, continue\EndIf
+		\If{(zapnuto pou¾ití textur)} \\ \quad \quad \quad \quad Nahraj texturu pou¾ívanou modelem do pipeline \EndIf
+		\If{((zapnuto pou¾ití lightmap) AND (model má lightmapu))} \\ \quad \quad \quad \quad Nahraj lightmapu pou¾ívanou modelem do pipeline  \EndIf	\\
+    	\If{(dynamický prvek scény)} \\ \quad \quad \quad \quad Proveï trasnsformace model-view matice dle logické reprezentace \EndIf	\\
+	    \quad \quad \quad Nahraj buffer s vertexy do pipeline \\
+		\quad \quad \quad Nahraj buffer s normálami vertexù do pipeline \\ 
+		\quad \quad \quad Nahraj model-view matici do pipeline \\ 
+		\quad \quad \quad Vykresli modely za pou¾ití aktuálnì zvoleného typu vykreslování \\
+	\EndFor \\
+Nahraj ulo¾enou model-view matici
+\EndFor
+\end{algorithmic} 
+\medskip
+
+Algoritmem jsou procházeny jednotlivé obálky statických èi dynamických objektù a je testováno, zda nále¾í do oblasti viditelné pozorovateli. Pokud není ani jeden bod obálky v této oblasti, pak nejsou její modely vykreslovány. Se zapnutým vykreslováním celé scény je dal¹í test pøeskoèen, av¹ak v pøípadì, ¾e tomu tak není, je testováno, zda je obálka prvkem herního pole. V dal¹ím cyklu se ji¾ procházejí jednotlivé modely obálky, které jsou opìt testovány na svou viditelnost. Jakmile jsou viditelné, pak je potøeba získat informaci o tom, zda není jejich materiál èásteènì prùhledný, nebo zda nebyli zprùhlednìny v¹echny vykreslované objekty. Pokud se tedy jedná o model s prùhledným materiálem, pak je jeho vykreslování odlo¾eno na pozdìj¹í dobu. Jakmile jsou splnìny dal¹í podmínky, pak jsou nahrány textury/lightmapy a je pøistoupeno k samotnému vykreslování. Model-view matice, která vznikla slo¾ením z invertované matice kamery a transformací, které byly provedeny na základì informací v logické reprezentaci scény, je nahrána do grafické pipeline a s ní i vertexy modelu a jejich normály. Modely jsou následnì vykresleny tak, jak bylo popsáno v podkapitole~\ref{section:webgl}. 
+
+V implementované høe jsou obálky modelù rozdìleny na statické a dynamické, tak¾e vykreslování probíhá ve více samostatných cyklech. Navíc je je¹tì pøi zobrazení samotného herního pole vykreslována podlaha. Pøi zobrazení modelù s prùhledným materiálem dojde k odlo¾enému vykreslování modelù v samostatném cyklu. Jednotlivé vykreslovací cykly jdou tedy v tomto poøadí:
+
+
+\myparagraph{1. Vykreslení podlahy herního pole}
+Podlaha herního pole je vykreslována v pøípadì, ¾e je zobrazeno pouze samotné hrací pole (klávesa \keystroke{n}). Umístìní vertexù a pozice textury podlahy jsou vypoèítány v¾dy pøi vytvoøení objektu s logickou reprezentací úrovnì.
+\myparagraph{2. Vykreslení statických objektù}
+Statické objekty jsou uchovány v poli \texttt{staticItems} a není u nich potøeba provádìt transformaci model-view matice, jeliko¾ se vùèi scénì nacházejí stále na stejné pozici.
+\myparagraph{3. Vykreslení dynamických objektù}
+Dynamické objekty jsou umístìny v asociativním poli \texttt{dynamicItems} a jsou umis»ovány na pozice, které odpovídající jejich pozici v logické reprezentaci scény. Výsledná translace v jednotlivých osách je vypoèítána podle následujícího vztahu.
+\begin{align}
+translace_{xzy}  = start_{xyz} + pozice_{xyz} * velikostPozice
+\end{align}
+Promìnná $start_{xyz}$ je místo, na kterém se nachází pozice $[0,0,0]$ herního pole. Promìnná $pozice_{xyz}$ udává pozici herního pole, kde se nachází aktuálnì vykreslovaný model a $velikostPozice$ je konstantou, která udává, jak velká je jedna pozice herního pole v souøadném systému scény. 
+
+\myparagraph{4. Vykreslení prùhledných objektù}
+Nìkteré z herních úrovní obsahují modely, které mají prùhledné materiály. Tyto modely musí být vykresleny a¾ po modelech, které prùhledné nejsou. Vykreslování prùhledných objektù se dále komplikuje tím, ¾e k tomu, abychom byli schopni zkombinovat barvy materiálù a dosáhli tak efektu prùhlednosti, musíme modely nejdøíve seøadit podle jejich vzdálenosti od pozorovatele. Jako první jsou vykresleny modely nejvzdálenìj¹í a nakonec ty, které jsou k pozorovateli nejblí¾e. Pøi naèítání jednotlivých modelù z JSON souboru jsou také dopoèítávány jejich støedy, které jsou právì pøi tomto øazení vyu¾ity. Je dùle¾ité si uvìdomit, ¾e seøazení modelù musí probìhnout pøi ka¾dém volání vykreslovací funkce, a tudí¾ je následný propad v rychlosti vykreslování pomìrnì znatelný. Barvy materiálù jsou pak kombinovány v èásti grafické pipeline, která byla popsána v podkapitole~\ref{section:webgl}. Prùhlednost v¹ech objektù scény lze zapnout pomocí klávesy \keystroke{o}.
+
+\pagebreak
+\myparagraph{Osvìtlení}
+Výsledný obraz je také urèen osvìtlením z rùzných svìtelných zdrojù, které se ve scénì nacházejí. Stejnì tak jako chybí podpora pro práci s kamerou, chybí ve WebGL i podpora osvìtlení. Ve¹keré výpoèty jsou tedy provádìny \uv{ruènì}, a to pøímo v shaderech grafické karty. V implementaci je vyu¾ito phongova osvìtlovacího modelu, který oproti osvìtlovacímu modelu pùvodní hry pou¾ívá per-fragment shading\footnote{Intenzita osvìtlení fragmentu nevzniká interpolací intenzit osvìtlení vertexù, ale je poèítána pro ka¾dý fragment zvlá¹». Je tak dosa¾eno více realistického typu zobrazení scény.}. Vyu¾ito je pouze jednoho dynamického bodového svìtla, které je umístìno pøímo nad herním polem. Implementace jako taková je pøipravena na vyu¾ití více svìtel, av¹ak pøi navý¹ení jejich poètu exponenciálnì klesá výkonnost vykreslovaní. Osvìtlení lze zapnout pomocí klávesy \keystroke{l} a odlesky pomocí klávesy \keystroke{s}. Vzhledem k omezenému rozsahu práce se ji¾ nebudeme osvìtlením dále zabývat. 
+
+\section{Nastavení hry}
+\label{section:nastaveni}
+Nìkteré zpùsoby nastavení ji¾ byli uvedeny v pøedchozím textu. V tabulce~\ref{table:settings} je uveden pøehled nejdùle¾itìj¹ích promìnných, které mìní zpùsob, jakým se chová vykreslování herní scény. Kompletní pøehled je obsa¾en ve vygenerované dokumentaci, která je souèástí pøilo¾eného DVD.
+
+\begin{table}
+\label{table:settings}
+\begin{center}
+\begin{tabular}{ | l | l |}
+\hline
+\textbf{Promìnná} & \textbf{Pou¾ití} \\ \hline
+\texttt{drawOnlyGameField} & Zapnutí vykreslení celé scény \\ \hline
+\texttt{useOpacity} & Zprùhlednìní v¹ech objektù scény \\ \hline
+\texttt{opacityLevel} & Nastavení úrovnì prùhlednosti objektù scény \\ \hline
+\texttt{useTextures} & Zobrazení textur \\ \hline
+\texttt{useLightmaps} & Zobrazení lightmap \\ \hline
+\texttt{useLightning} & Zapnutí osvìtlení \\ \hline
+\texttt{useSpecular} & Zobrazení odleskù \\ \hline
+\texttt{useTopCamera} & Pøepne na kameru kolmou herní pole \\ \hline
+\texttt{paintSelectedBugRed} & Beru¹ka zèervená po jejím vybrání  \\ \hline
+\texttt{drawEnvelopes} & Vykreslení obálek dynamických objektù scény  \\ \hline
+\texttt{drawFloor} & Vykreslení podlahy \\ \hline
+\texttt{useNotifications} & Zobrazení notifikací \\ \hline
+\texttt{showFPSinConsole} & Zobrazí FPS v konzoli prohlí¾eèe \\ \hline
+\texttt{useProjection} & Zapnutí mo¾nosti zmìny úhlu projekce\\ \hline
+\texttt{log} & Zobrazení debugovacích informací v konzoli prohlí¾eèe \\ \hline
+\texttt{renderMode} & Nastavení typu vykreslování \\ \hline
+\texttt{cameraMode} & Nastavení typu kamery \\ \hline
+\end{tabular}
+\end{center}
+\caption{Nìkterá z herních nastavení}
+\end{table}

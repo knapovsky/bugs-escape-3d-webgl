@@ -1,0 +1,531 @@
+﻿div{
+    border: 0px solid black;
+}
+
+body{
+    background-image: url('../img/pattern.png');
+    background-attachment:fixed;
+}
+
+#center {
+    margin: 0px auto;
+    margin-top: 50px;
+    width: 1046px;
+    /*padding-top: 39px;*/
+    position: relative;
+    border: 0px solid black;
+
+}
+
+#console{
+    position: relative;
+    /*margin-top: 92px;*/
+    background-image: url('../img/console.png');
+    pointer-events:none;
+    /*background-color: blue;*/
+    width: 1046;
+    height: 642px;
+    z-index: 1000;
+    /*visibility: hidden;*/
+}
+
+#clippingWindow{
+    position: relative;
+    width: 1008px;
+    height: 601px;
+    margin-left: 19px;
+    top: 20px;
+    z-index: 99;
+    pointer-events: auto;
+    border: 0px solid black;
+
+}
+
+.overlay{
+    position: absolute;
+    top: 70px;
+    left: 76px;
+    pointer-events: auto;
+    width: 896px;
+    height: 504px;
+    z-index: 999;
+    opacity: 0.0;
+}
+
+#webgl-canvas{
+    z-index: 1000;
+}
+
+#infoWindow{
+    background-image: url('../img/infoWindow.png');  
+    color: white;
+    background-repeat: no-repeat;
+}
+
+#howtoWindow{
+    
+    float: left;
+    overflow: hidden;
+}
+
+#howtoScreens{
+
+    position: relative;
+    left: 0px;
+    width: 3000px;
+    height: 504px;
+}
+
+#howtoScreen1{
+
+    background-image: url('../img/howtoScreen1.png');
+}
+
+#howtoScreen2{
+
+    background-image: url('../img/howtoScreen2.png');
+}
+
+#howtoScreen3{
+
+    background-image: url('../img/howtoScreen3.png');
+}
+
+#howtoScreensNavigation{
+
+    width: 96px;
+    height: 48px;
+    float: left;
+    position: relative;
+    left: 775px;
+    top: -60px; 
+}
+
+#prevHowtoScreen{
+    background-image: url('../img/back.png');
+}
+
+#nextHowtoScreen{
+    background-image: url('../img/next.png');
+}
+
+#controlsWindow{
+
+    float: left;
+    overflow: hidden;    
+}
+
+.insideScreen{
+    position: relative;
+    float: left;
+    width: 896px;
+    height: 504px; 
+}
+
+#controlScreens{
+
+    position: relative;
+    left: 0px;
+    width: 1800px;
+    height: 504px;
+}
+
+#controlScreen1{
+    background-image: url('../img/controlsWindow1.png'); 
+}
+
+#controlScreen2{
+    background-image: url('../img/controlsWindow2.png'); 
+}
+
+#controlScreensNavigation{
+
+    width: 96px;
+    height: 48px;
+    float: left;
+    position: relative;
+    left: 775px;
+    top: -60px;
+}
+
+.icon{
+
+    float: left;
+    position: relative;
+    width: 48px;
+    height: 48px;
+    opacity: 0.2;
+    -moz-opacity: 0.2;
+    filter:alpha(opacity=2);
+
+    cursor: pointer;
+}
+
+#prevControlScreen{
+    background-image: url('../img/back.png');
+}
+
+#nextControlScreen{
+    background-image: url('../img/next.png');
+}
+
+#welcomeWindow{
+    background-image: url('../img/welcomeWindow.png');
+    z-index: 10001;
+    opacity: 1.0;
+}
+
+#notificationWindow{
+    z-index: 10000;
+    pointer-events: none;
+    opacity: 1.0;
+}
+
+#ui{
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 1.0;
+    -moz-opacity: 1.0;
+    filter:alpha(opacity=10);
+}
+
+#inventory{
+    position: relative;
+    top: 400px;
+}
+
+#gameProgress{
+    position: relative;
+    width: 200px;
+    height: 20px;
+    top: 465px;
+    left: -200px;
+}
+
+#notification{
+    position: relative;
+    margin: 0px auto;
+    top: 202px;
+    width: 400px;
+    height: 100px;
+    background-image: url('../img/fullscreen.png');
+    opacity: 0.0;
+}
+
+#progressbar{
+    position: relative;
+    margin: 0px auto;
+    width: 700px;
+    height: 10px;
+    top: 247px;
+    opacity: 0.0;
+}
+
+#menu{
+    /*left: 718px;*/
+    float: right;
+    /*top: 50px;*/
+    margin-top: -49px;
+    margin-right: 35px;
+    z-index: -10;
+}
+
+.menuItem{
+    width: 96px;
+    height: 70px;
+    float: left;
+    background-repeat:no-repeat;
+    background-position: 0px 45px;
+    cursor: pointer;
+}
+
+.inventoryItem{
+    width: 50px;
+    height: 60px;
+    float: left;
+}
+
+#pickaxe{
+    background-image: url('../img/pickaxeOff.png');
+}
+
+#snorchel{
+    background-image: url('../img/snorchelOff.png');
+}
+
+#weight{
+    background-image: url('../img/weightOff.png');
+}
+
+#strength{
+    background-image: url('../img/strengthOff.png');
+    width: 60px;
+}
+
+/*
+.menuItem:hover{
+    background-position: 0px 0px;
+}*/
+
+#controls{
+    background-image: url('../img/controls.png');
+}
+
+#howto{
+    background-image: url('../img/howto.png');
+}
+
+#info{
+    background-image: url('../img/info.png');
+}
+
+#play{
+    position: relative;
+    left: -590px;
+    background-image: url('../img/play.png');
+}
+
+#chooserButton{
+    background-image: url('../img/buttonOpen.png');
+    width: 32px;
+    height: 32px;
+    position: relative;
+    /*left: 507px;*/
+    margin: 0 auto;
+    top: -21px;
+    cursor: pointer;
+    z-index: 200;
+    pointer-events: auto;
+}
+
+/*#chooserButton:hover{
+    background-image: url('../img/buttonOpenHover.png');
+}*/
+
+#logo{
+    background-image: url('../img/logo.png');
+    width: 270px;
+    height: 269px;
+    margin: 0px auto;
+    position: relative;
+    top: 20px;
+
+}
+
+#chooseDiv{
+    visibility: hidden;
+    display: none;
+}
+
+#loadingtext{
+    display: none;
+}
+
+#chooser{
+    background-image: url('../img/chooser.png');
+    width: 933px;
+    height: 215px;
+    position: relative;
+    left: 53px;
+    margin-top: -200px;
+    z-index: 5;
+}
+
+.insideChooserButton{
+    margin-top:10px;
+    width: 105px;
+    height: 186px;
+    cursor: pointer;
+    z-index:20;
+    border: 0px solid black;
+}
+
+/*.insideChooserButton:hover{
+    background-image: url('../img/chooserShadow.png');
+}*/
+
+#chooserLeftButton{
+    float: left;
+    margin-left: 11px;
+}
+
+#levels{
+    margin: 0px auto;
+    /*background-color: #E3E3E3;*/ 
+    width: 700px;
+    height: 194px;
+    margin-top: 10px;
+    float: left;
+    overflow: hidden;
+}
+
+#levelList{
+    position: relative;
+    left: 10px;
+    top: 10px;
+    width: 3400px;
+    height: 194px;
+}
+
+.level{
+    width: 150px;
+    height: 150px;
+    background-image: url('../img/level.png');
+    margin: 10px 10px 10px 10px;
+    float: left;
+    background-repeat: no-repeat;
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+#level1{
+    background-image: url('../img/level1.png');
+}
+
+#level2{
+    background-image: url('../img/level2.png');
+}
+
+#level3{
+    background-image: url('../img/level3.png');
+}
+
+#level4{
+    background-image: url('../img/level4.png');
+}
+
+#level5{
+    background-image: url('../img/level5.png');
+}
+
+#level6{
+    background-image: url('../img/level6.png');
+}
+
+
+#level7{
+    background-image: url('../img/level7.png');
+}
+
+
+#level8{
+    background-image: url('../img/level8.png');
+}
+
+
+#level9{
+    background-image: url('../img/level9.png');
+}
+
+
+#level10{
+    background-image: url('../img/level10.png');
+}
+
+#level11{
+    background-image: url('../img/level11.png');
+}
+
+#level12{
+    background-image: url('../img/level12.png');
+}
+
+#level13{
+    background-image: url('../img/level13.png');
+}
+
+#level14{
+    background-image: url('../img/level14.png');
+}
+
+#level15{
+    background-image: url('../img/level15.png');
+}
+
+#level16{
+    background-image: url('../img/level16.png');
+}
+
+#level17{
+    background-image: url('../img/level17.png');
+}
+
+#level18{
+    background-image: url('../img/level18.png');
+}
+
+#level19{
+    background-image: url('../img/level19.png');
+}
+
+#level20{
+    background-image: url('../img/level20.png');
+}
+
+#chooserRightButton{
+    float: right;
+    margin-right: 11px;
+}
+
+.chooserArrow{
+    width: 29px;
+    height: 24px;
+    position: relative;
+    left: 39px;
+    top: 81px;
+}
+
+#chooserArrowLeft{
+    background-image: url('../img/chooserArrowLeft.png');
+}
+
+#chooserArrowRight{
+    background-image: url('../img/chooserArrowRight.png');
+}
+
+.unselectable {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+
+/* AUDIO PLAYER */
+#audioPlayer {
+
+    float: right;
+    position: absolute;
+    top: 500px;
+    left: 800px;
+    margin: 0px auto;
+    width: 144px;
+    height: 48px;
+    z-index:9999;
+    pointer-events: auto;
+}
+
+.audioIcon {
+
+    width: 48px;
+    height: 48px;
+    float: left;
+    opacity: 0.5;
+    -moz-opacity: 0.5;
+    filter:alpha(opacity=5);
+}
+
+#prev {
+    background-image: url('../img/rew.png');
+}
+
+#playPause {
+    background-image: url('../img/pausetrack.png');
+}
+
+#next {
+    background-image: url('../img/ff.png');
+}
+

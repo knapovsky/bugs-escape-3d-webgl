@@ -1,0 +1,90 @@
+\chapter{Testování}
+\label{chap:testing}
+Tato kapitola se primárnì zabývá testováním implementované hry. Jeho výsledky jsou dùle¾ité pro následnou diskuzi ohlednì vyu¾itelnosti novì objevujících webových technologií. K tomu, abychom mohli takovou diskuzi provádìt, je nejprve potøeba porovnat výsledné øe¹ení s pùvodní hrou a pøedstavit tak výhody/nevýhody webu nativních aplikací.
+
+\section*{Porovnání her}
+Implementovaná hra zakládá na høe Beru¹ky 2. Herní koncept zùstal zachován, av¹ak zpùsob, jakým je øe¹eno vykreslování, je odli¹ný. Pùvodní hra je technologicky mnohem vyspìlej¹í (viz.~\ref{section:navrhVykreslovani}). Obsahuje animace, øe¹í viditelnost objektù scény pomocí hierarchických OBB obálek a vyu¾ívá mnoho dal¹ích moderních technologií. Hra je oproti implementované i výraznì rychlej¹í. Pøi rozli¹ení $1920x1080$ dosahuje hra rychlosti 52 snímkù za sekundu a pøi rozli¹ení $1024x768$ 124 snímkù za sekundu~\footnote{Intel x3100}. Implementované øe¹ení má tedy v oblasti vykreslování mnoho prostoru ke zdokonalení a optimalizaci. Implementovaná hra v¹ak vítìzí v dostupnosti. Je mo¾né ji bez instalace zaèít ihned pou¾ívat na vìt¹inì dne¹ních operaèních systémù. Byla ovìøena funkènost i na operaèním systému Android. Hru na tomto systému v¹ak není mo¾né ovládat, jeliko¾ nepøijímá dotykové události. Výslednou podobu hry Beru¹ky 2 WebGL v prohlí¾eèi Firefox 12 je mo¾né vidìt na obrázku~\ref{fig:gameImage}. 
+
+\section*{Testování}
+Hra byla testována v prohlí¾eèích Mozilla Firefox a Google Chrome na operaèním systému Microsoft Windows 7. Testy byly provedeny na dvou rùzných strojích s rozdílnou hardwarovou konfigurací.
+
+\begin{itemize}
+\item Intel C2D T7100, GPU Intel x3100
+\item Intel C2D T5700, GPU ATI Radeon 4330
+\end{itemize}
+
+Rozdílnost tìchto strojù tkví hlavnì v instalované grafické kartì. Intel x3100 neumí pou¾ívat shader model 2.0, který je nutností pro hardwarovou akceleraci WebGL. Obraz je tedy vykreslován softwarovì. Hra byla v¾dy testována se zapnutým zobrazením celé scény a následnì se zobrazením samostatného herního pole. Ka¾dý z testù je navíc proveden pro rùzné velikosti drawing bufferu~\ref{subsection:pipeline} a rùzné vykreslovací módy. Hodnoty v polích tabulek v¾dy udávají vykreslené snímky za sekundu\footnote{FPS}.
+
+\myparagraph{Intel x3100}
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{ | r | c | c | c | c |}
+\hline
+ & \multicolumn{2}{|c|}{$896 \times 504$} & \multicolumn{2}{|c|}{$1920 \times 979$} \\ \hline
+ & \textbf{Herní pole} & \textbf{Celá scéna} & \textbf{Herní pole} & \textbf{Celá scéna} \\ \hline
+\textbf{Plné zobrazení} & 15 & 3 & 7 & 2 \\ \hline
+\textbf{®ádné odlesky} & 15 & 3 & 7 & 2 \\ \hline
+\textbf{Bez textur} & 16 & 3 & 7 & 2 \\ \hline
+\textbf{Bez osvìtlení} & 16 & 3 & 7 & 2 \\ \hline
+\textbf{Bez textur a osvìtlení} & 17 & 3 & 7 & 3 \\ \hline
+\end{tabular}
+\end{center}
+\caption{Windows 7, Intel x3100, Firefox 11.0}
+\end{table}
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{ | r | c | c | c | c |}
+\hline
+ & \multicolumn{2}{|c|}{$896 \times 504$} & \multicolumn{2}{|c|}{$1920 \times 979$} \\ \hline
+ & \textbf{Herní pole} & \textbf{Celá scéna} & \textbf{Herní pole} & \textbf{Celá scéna} \\ \hline
+\textbf{Plné zobrazení} & 51 & 17  & 35 & 13 \\ \hline
+\textbf{®ádné odlesky} & 51 & 17  & 35 & 13 \\ \hline
+\textbf{Bez textur} & 51 & 17& 35 & 13 \\ \hline
+\textbf{Bez osvìtlení} & 51 & 17 & 48 & 17 \\ \hline
+\textbf{Bez textur a osvìtlení} & 56 & 18 & 50 & 17 \\ \hline
+\end{tabular}
+\end{center}
+\caption{Windows 7, Intel x3100, Chrome 19.0.1084.46}
+\end{table}
+
+\myparagraph{ATI Radeon 4330}
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{ | r | c | c | c | c |}
+\hline
+ & \multicolumn{2}{|c|}{$896 \times 504$} & \multicolumn{2}{|c|}{$1920 \times 979$} \\ \hline
+ & \textbf{Herní pole} & \textbf{Celá scéna} & \textbf{Herní pole} & \textbf{Celá scéna} \\ \hline
+\textbf{Plné zobrazení} & 60 & 37 & 44 & 32 \\ \hline
+\textbf{®ádné odlesky} & 60 & 37 & 44 & 32 \\ \hline
+\textbf{Bez textur} & 60 & 39 & 51 & 38 \\ \hline
+\textbf{Bez osvìtlení} & 60 & 40 & 44 & 32 \\ \hline
+\textbf{Bez textur a osvìtlení} & 60 & 41 & 43 & 40 \\ \hline
+\end{tabular}
+\end{center}
+\caption{Windows 7, Chrome 19.0.1084.46, ATI Radeon 4330}
+\end{table}
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabular}{ | r | c | c | c | c |}
+\hline
+ & \multicolumn{2}{|c|}{$896 \times 504$} & \multicolumn{2}{|c|}{$1920 \times 979$} \\ \hline
+ & \textbf{Herní pole} & \textbf{Celá scéna} & \textbf{Herní pole} & \textbf{Celá scéna} \\ \hline
+\textbf{Plné zobrazení} & 46 & 4 & 31 & 4 \\ \hline
+\textbf{®ádné odlesky} & 46 & 4 & 31 & 4 \\ \hline
+\textbf{Bez textur} & 47 & 4 & 33 & 4 \\ \hline
+\textbf{Bez osvìtlení} & 49 & 4 & 32 & 4 \\ \hline
+\textbf{Bez textur a osvìtlení} & 50 & 41 & 34 & 4 \\ \hline
+\end{tabular}
+\end{center}
+\caption{Windows 7, Firefox 11, ATI Radeon 4330}
+\end{table}
+
+Rozdíl softwarového a hardwarového vykreslování obrazu není pøíli¹ znatelný. Není ani vidìt pøíli¹ velký rozdíl v rychlosti vykreslování rùzných typù zobrazení. Rozdíl je v¹ak znatelný v rychlosti prohlí¾eèù Firefox 11 a Chrome 19. Google Chrome je obecnì známý tím, ¾e obsahuje velice rychlý interpret JavaScriptového kódu. Bylo také provedeno testování v prohlí¾eèi Google Chrome 9, co¾ je první verze tohoto prohlí¾eèe, která podporovala technologii WebGL. Obraz nebyl vykreslován rychlostí vy¹¹í ne¾ 2 snímky za sekundu a lze tedy u tohoto prohlí¾eèe vidìt výrazný posun k lep¹ímu.
+
+Z poznatkù, které byly pøi testech získány je mo¾né vidìt velikou závislost rychlosti vykreslování na rychlosti zpracování JavaScriptového kódu. I kdy¾ se rychlost interpretace JavaScriptového kódu neustále zvy¹uje, není tento jazyk stále urèen pro zpracování velkého mno¾ství dat. Pro optimalizaci WebGL aplikací je tedy potøeba pøenechat co nejvìt¹í èást práce na grafickém hardwaru. 
+
+Na prvním uvedeném systému byla také testována byla také rychlost naèítání herní úrovnì. Pùvodní hra naèetla úroveò za 9 sekund. Herní úroveò hry implementované v této práci se v prohlí¾eèi Chrome 19 naèítá 30 milisekund. Z toho se 20 milisekund naèítá JSON soubor a 10 milisekund se naèítají potøebné textury. V této situaci v¹ak byly ve¹keré herní soubory ulo¾eny lokálnì. Doba potøebná k zobrazení úrovnì ze serveru je výraznì vy¹¹í. JSON soubor obsahuje mnoho informací a jeho prùmìrná velikost se pohybuje kolem 6 MB. Jsou v¹ak i takové herní úrovnì, které s texturami zabírají kolem 15 MB dat. Ètenáø si jistì doká¾e pøedstavit, jak dlouhou dobu naèítání takového mno¾ství dat trvá.

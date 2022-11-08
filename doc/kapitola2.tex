@@ -1,0 +1,723 @@
+\chapter{Pou¾ité technologie a teorie}
+V této kapitole jsou uvedeny informace týkající se technologií vyu¾ítých pøi implementaci hry. Ka¾dá z nich je struènì pøedstavena a uvedena do souvislosti s touto prací. Mimo tìchto informací kapitola také obsahuje teorii nutnou k pochopení postupù pou¾itých pøi implementaci.
+
+\label{chap:teorie}
+\section{HTML5}
+\label{section:html5}
+HTML5\footnote{\url{http://www.w3.org/TR/html5/}} je pøipravovaným webovým standardem, který v první øadì vylep¹uje podporu zobrazení multimediálního obsahu prostøednictvím webového prohlí¾eèe. Co se týèe doby od vydání pøedchozí specifikace HTML4.01\footnote{\url{http://www.w3.org/TR/REC-html40/}}, je nováèkem na poli webových technologií a jeho finální specifikace není v dobì psaní této práce stále dokonèena. Vzhledem k tomu, ¾e technologie  zahrnuté v jeho specifikaci øe¹í mnohé praktické problémy, vývojáøi webových prohlí¾eèù ji¾ nyní jednotlivé prvky HTML5 implementují. Experimenty s prohlí¾eèi tak dávají pracovním skupinám spravujícím tuto specifikaci zpìtnou vazbu, na jejím¾ základì lze provést mnohá vylep¹ení. Významnou vlastností specifikace je zpìtná kompatibilita s její pøedchozí verzí, co¾ umo¾òuje zobrazovat nové typy dokumentù v prohlí¾eèích, které tyto technologie doposud neimplementují.~\cite{pilgrim2010html5, macdonald2011html5, lubbers2011pro}
+
+Nejprve bude zmínìn historický vývoj a rozdìlení HTML5 technologií, poté bude uveden výèet nìkterých nových syntaktických a sémantických elementù, za ním¾ bude následovat popis elementu \texttt{<canvas>}, který je pou¾it pøi implementaci hry.
+
+\subsection*{Historie}
+\label{subsection:historieHTML5}
+Roku 2004 pøedstavili Mozilla Foundation a Opera Sorfware na W3C konzorciu návrh, který odrá¾el souèasné po¾adavky na webové aplikace. Tento návrh se soustøedil na technologie, které by byly zpìtnì kompatibilní s tehdej¹ími webovými prohlí¾eèi a zahrnoval také poèáteèní návrh specifikace Web Forms 2.0. Hlasování konzorcia dopadlo v neprospìch návrhu, co¾ vedlo k tomu, ¾e pracovní skupina W3C nadále soustøedila své prostøedky na vývoj specifikace XHTML2. Po¾adavky na webové aplikace v¹ak zùstaly nevysly¹eny, a tudí¾ byla hlavními pøedstaviteli vývojáøù webových prohlí¾eèù vytvoøena nová pracovní skupina s názvem Web Hypertext Application Technology Working Group (WHATWG). O pìt let pozdìji, roku 2009, zanechala W3C snahy protlaèit specifikaci XHTML2 a spojila se s pracovní skupinou WHATWG, aby své usilí zamìøily na vývoj spoleèného standardu HTML5.~\cite{pilgrim2010html5, macdonald2011html5, lubbers2011pro}
+
+Znaèné popularity HTML5 nabylo po roce 2010, kdy tehdej¹í výkonný øeditel firmy Apple, Steve Jobs, prohlásil~\footnote{\url{https://www.apple.com/hotnews/thoughts-on-flash/}}, ¾e na svých zaøízeních nebudou nadále podporovat obsah zobrazovaný pomocí technologie Adobe Flash a zamìøí se na podporu HTML5. Vzhledem k zastoupení této firmy na trhu zaèala valná vìt¹ina velkých webových spoleèností svùj obsah nabízet i pomocí této technologie.
+
+V bøeznu roku 2011 vytyèila W3C cíle pro vývoj HTML5, kde urèila rok 2014 jako cílový pro pøijetí specifikace. Podmínky tohoto pøijetí jsou 2 plnì funkèní implementace. Ji¾ dnes jsou mnohé implementace prvkù stabilní a pøipraveny k pou¾ití. Jednou z nich je právì v implementaci hry vyu¾itý element \texttt{<canvas>}.
+
+
+\subsection*{Rozdìlení HTML5 technologií}
+\label{subsection:rozdeleniHTML5}
+Diagram technologií a jejich rozdìlení je vyèlenìn do pøílohy~\ref{priloha:html5}. V následujících odstavcích jsou tyto kategorie struènì popsány. \\
+
+\textbf{Oficiální W3C specifikace} zahrnuje nové syntaktické a sémantické elementy, nové a vylep¹ené web widgety, podporu pro audio/video a také element \texttt{<canvas>}, který slou¾í k vykreslování grafiky pomocí JavaScriptu. Tato èást zahrnuje vìt¹inu prvkù HTML5, které jsou prohlí¾eèi dobøe podporovány. 
+
+\textbf{Prvky pùvodního návrhu} patøily do specifikace, kterou pøipravila pracovní skupina WHATWG. Vìt¹ina z nich vy¾aduje ke své práci JavaScript a mezi ty nejdùle¾itìj¹í patøí \textit{Local Data Storage} a \textit{Offline aplikace}. 
+
+\textbf{Prky, které jsou èasto zahrnovány do HTML5} jsou napøíklad CSS3 a nástroje pro geolokaci.
+
+
+
+\subsection*{Nové syntaktické a sémantické elementy HTML5}
+\label{subsection:newElementsHTML5}
+Nové sémantické elementy roz¹iøují mo¾nosti rozli¹ení úsekù znaèkovaného textu. Na místì, kde byla typicky pou¾ita znaèka \texttt{<div>}, nebo \texttt{<span>} je nyní mo¾né pou¾ít znaèky jako \texttt{<nav>} pro navigaci webu a dále pak napøíklad element \texttt{<footer>}, který oznaèuje patièku dokumentu. 
+
+\textbf{Video} a \textbf{audio} data byla v pøedchozích verzích HTML vkládána do dokumentù pomocí elementu \texttt{<object>}. Ten umo¾òoval oznaèit obsah interpretovaný zásuvným modulem prohlí¾eèe, kterým byl pro pøehrávání videa nejèastìji Adobe Flash. Ten v¹ak díky novým mo¾nostem HTML5 a pøístupu firem jako Apple postupnì ztrácí své dominantní postavení.
+
+\pagebreak
+
+\subsection*{Technologie HTML5 pou¾ité pøi implementaci}
+\label{subsection:html5aImplementace}
+Pou¾ité technologie:
+
+\begin{itemize}
+\item Canvas API\footnote{V textu lze èasto nalézt pojem API. API, neboli Applicaton Programming Interface je, jak z názvu vyplývá, rozhraní pro programování aplikací. Jedná se o sbírku procedur, funkcí, èi tøíd, které mù¾e programátor pøi tvorbì aplikace vyu¾ívat.} 
+\item WebGL
+\item DOM API (Souèást HTML5 Microdata)
+\item Web Audio API
+\end{itemize}
+
+Z technologií HTML5 je pøi implementaci hry primárnì vyu¾ito \textbf{Canvas API}, které umo¾òuje prostøednictvím \textbf{WebGL} (podkapitola~\ref{section:webgl}) pøistupovat k elementu \texttt{<canvas>} a vykreslovat tak 3D grafiku. \textbf{DOM API} je rozhraní pro pøístup k prvkùm zobrazovaného dokumentu a slou¾í k modifikaci jejich obsahu, struktury, nebo stylu, kterým jsou zobrazovány. \textbf{Web Audio API} je rozhraním elementu \texttt{<audio>}, které slou¾í k pøehrávání herní hudby. Pùvodní návrh hry zahrnoval také vyu¾ítí technologie \textbf{localStorage}, která umo¾òuje uchovávat herní data na stranì klienta bez nutnosti jejich naèítaní pøi obnovení webové stránky. Vzhledem k tomu, ¾e dne¹ní prohlí¾eèe mají omezení na mno¾ství ulo¾ených dat\footnote{\url{http://dev-test.nemikor.com/web-storage/support-test/}}, nenalézá tato technologie v implementaci smysluplné vyu¾ití. Na diagramu~\ref{priloha:html5} je také vyznaèen JavaScriptový framework \textbf{jQuery}, jeho¾ je vyu¾ito hlavnì pro vytvoøení rùzných animací webu.
+
+\subsection*{HTML5 \texttt{<canvas>}}
+\label{subsection:HTML5canvas}
+Základní HTML5 Canvas API obsahuje \textbf{2D} kontext, který umo¾òuje vykreslovat rùzné typy tvarù, text a také umo¾òuje zobrazovat obrazová data pøímo do oblasti elementu \texttt{<canvas>}. Pro vykreslování je mo¾né volit rùzné barvy, rotovat s prvky, zprùhledòovat je, èi manipulovat s jednotlivými pixely tohoto elementu.
+
+V souvislosti s WebGL mluvíme o \textbf{3D} kontextu, který umo¾òuje pøímé vykreslování bitmapy, její¾ obsah je mo¾né mìnit pomocí JavaScriptu. U 3D kontextu je pøi ka¾dém volání vykreslovacího rozhraní plocha elementu zcela pøekreslena a je tedy programátorovou prací pøipravit vykreslovaný obraz pøed ka¾dým voláním. Tím se \texttt{<canvas>} odli¹uje od technologií jako Flash, Silverlight, nebo SVG, které vykreslovaný obraz pouze aktualizují (umo¾òují napøíklad posouvat vykreslované objekty scény vùèi své aktuální pozici), co¾ na jednu stranu programátora odstiòuje od nízkoúrovòových operací, av¹ak na stranu druhou má programátor omezenou kontrolu nad výsledným vykresleným obrazem. Podrobnìj¹í informace o tom, jak vykreslování pracuje jsou souèástí podkapitoly~\ref{section:webgl}.
+
+\pagebreak
+
+\section{Javascript}
+\label{section:javascript}
+Vìt¹ina webových stránek se dnes podobá plnohodnotným desktopovým aplikacím právì díky JavaScriptu. JavaScript je programovací jazyk, který umo¾òuje vylep¹it zobrazovaný dokument prostøednictvím animací, interaktivitou, nebo dynamickými visuálními efekty. Jeho velkou výhodou je to, ¾e stránky reagují na podnìty u¾ivatele okam¾itì - pøi vyplòování formuláøe, nebo v moment, kdy u¾ivatel pohne my¹í na urèitou pozici. Jeho zpracování je toti¾ oproti jiným skriptovacím jazykùm pou¾ívaným na webu provádìno na klientském zaøízení (av¹ak nejen tam, jak bude uvedeno dále). V souèasné dobì je jeho masivní vyu¾ití vidìt v projektech jako Facebook\footnote{\url{www.facebook.com}}, nebo napøíklad Google Maps\footnote{\url{maps.google.com}}.
+
+Popularita tohoto jazyka roste a s ním i jeho vyu¾ití. Nejen, ¾e jeho interprety lze dnes nalézt ve v¹ech webových prohlí¾eèích na stolních poèítaèích, herních konzolích, chytrých telefonech èi tabletech, ale je vyu¾it také pro popis grafických rozhraní desktopových aplikací, nebo jako jazyk pou¾itý na stranì serveru. Pøíklady vyu¾ití JavaScriptu mimo web jsou uvedeny v následujícím pøehledu.
+
+\begin{itemize}
+\item Doplòky pro prohlí¾eè Google Chrome, Opera, Safari
+\item Apple dashboard widgety
+\item JavaScript v pdf souborech
+\item Skriptování v Adobe Photoshop, Illustrator, InDesign
+\item Zpracování signálu v Max/MSP pro program Ableton Live
+\item Skriptování v Unity
+\item JavaScript v prostøedí Javy
+\item Popis grafického rozhraní v knihovnì Qt
+\item \ldots
+\end{itemize}
+
+\subsection*{Historie jazyka}
+\label{subsection:jsHistorie}
+Autorem jazyka je Brendan Eich z tehdej¹í spoleènosti Netscape. Jazyk byl nejdøíve vyvíjen pod názvem \textit{\uv{Mocha, LiveScript}}, av¹ak s vydáním prohlí¾eèe Netscape 2.0B3, jeho¾ byl tento jazyk souèástí, se název z marketingových dùvodù zmìnil na JavaScript. Jeho velký úspìch vedl k tomu, ¾e spoleènost Microsoft vytvoøila jeho obdobu pro svùj prohlí¾eè Internet Explorer, kterou nazvala JScript. V roce 1997 byl jazyk standardizován pod názvem ECMAScript, ze kterého byly následnì odvozeny i dal¹í implementace, jako je napøíklad ActionScript. Svého nejvìt¹ího rozmachu se tento jazyk doèkal s roz¹íøením technik, které se souhrnnì oznaèují jako AJAX (\ref{subsection:AJAX}).\cite{flanagan2006javascript}
+
+\subsection*{Struèný popis jazyka JavaScript}
+\label{subsection:jsPopis}
+JavaScript je multiplatformní, dynamický, slabì typovaný skriptovací jazyk. Podporuje rùzná paradigmata vèetnì objektového, èeho¾ je v implementaci hry èasto vyu¾íváno. Syntaxe jazyka je ovlivnìna konvencemi jazykù Java a C, principiálnì je v¹ak jazyk vystavìn podobnì jako jazyky Self a Scheme. Zpùsob, jakým jsou vytváøeny objekty, je zde oproti klasickým jazykùm jako C++ nebo Java odli¹ný díky tomu, ¾e je tento jazyk prototypovì zalo¾ený. Tøídy jsou tak nahrazeny konstruktory objektù a dìdiènost prototypováním.\cite{flanagan2006javascript} Pøíklad vytvoøení konstruktoru objektu a jeho následné pou¾ití je uveden ve zdrojovém kódu~\ref{code:jsObjectConstructor}.
+%\medskip
+\begin{lstlisting}[caption=Pøíklad vytvoøení objektu v JavaScriptu,label=code:jsObjectConstructor]
+function TestObject(num){
+
+    this.property1 = 1;
+    this.property2 = this.property1;
+    this.property3 = num;
+}
+
+var test = new TestObject(5);
+alert(test.property1); // 1
+alert(test.property2); // 1
+alert(test.property3); // 5
+
+test.property1 = 6;
+alert(test.property1); // 6
+\end{lstlisting}
+
+JavaScript interaguje s webovou stránkou prostøednictvím døíve popsaného rozhraní DOM tak, ¾e se navá¾e zpracování událostí vytváøených u¾ivatelem na funkce, které je zpracovávají. Rozhraní DOM v¹ak není pøesnì standardizované a prohlí¾eèe ho implementují rùznì. U nìkterých prvkù je tedy nutné rozli¹ovat, který prohlí¾eè JavaScript aktuálnì interpretuje a dle toho volit, jakým zpùsobem se s nimi bude nakládat. Jako pøíklad je ve zdrojovém kódu~\ref{code:jsMouseEvent} uvedeno zpracování události pohybu koleèka my¹i.
+
+\begin{lstlisting}[caption=Zpracování události pohybu koleèka my¹i,label=code:jsMouseEvent]
+function handleWheel(event) {
+    var delta = 0;
+    
+    // Zpracování události v Internet Exploreru
+    if (!event){
+       event = window.event;
+    }
+	
+		// Internet Explorer, Opera, Chrome
+		if (event.wheelDelta) {
+	    	delta = event.wheelDelta / 120;
+		}
+		// Mozilla Firefox
+		else if (event.detail) {
+	    	delta = -event.detail / 3;
+		}
+    // ...
+}
+\end{lstlisting}
+
+\subsection*{AJAX}
+\label{subsection:AJAX}
+AJAX, neboli Asynchronous JavaScript and XML, je souhrnné oznaèení pro vzájemnì propojené techniky pou¾ívané na klientské stranì webových aplikací. Tyto techniky umo¾òují asynchronnì nahrát data ze serveru, co¾ pro u¾ivatele znamená, ¾e aktuálnì zobrazená webová stránka nemusí být znovu naètena a interakce s aplikací je tak mnohem pøívìtivìj¹í. Vyu¾ívá se pøitom \texttt{XMLHttpRequest} objektu, který je dostupný prostøednictvím JavaScriptu. Navzdory názvu, který vyzdvihuje pøenos dat ve formátu XML, je mo¾né pou¾ít i formáty jiné. Ve høe je tìchto technik vyu¾ito k naètení herních úrovní, které jsou reprezentovány soubory formátu JSON a následnì pak potøebných textur a lightmap. 
+
+%diagram AJAX
+
+\subsection*{JavaScript Frameworky}
+\label{subsection:jsFrameworky}
+JavaScriptové frameworky slou¾í k urychlenému vývoji webových aplikací. Vytváøejí jakousi vrstvu nad základními prostøedky jazyka a poskytují k nim tak zjednodu¹ený pøístup. Frameworkù pro jazyk JavaScript existuje celá øada, av¹ak pro implementaci bylo vyu¾ito jednoho z nejznámìj¹ích - jQuery.
+
+jQuery umo¾òuje pøistupovat k prvkùm DOM tak, ¾e se rozdíly mezi prohlí¾eèi (jako tøeba právì zpracování události koleèka my¹i) stírají a k prvkùm je tak pøistupováno jednotnou formou. Za základì událostí generovaných u¾ivatelem je také umo¾nìno animovat vzhled prvkù dokumentu - mìnit jejich pozice, prùhlednost, èi napøíklad vrstvu, ve které se mají zobrazit. Toho je ve høe vyu¾ito velmi èasto, av¹ak vzhledem k tomu, ¾e se jedná o animace webu samotného, který není pøímou souèástí této práce, nebude jejich popisu vìnováno mnoho prostoru. Pøíklad animace prùhlednosti prvku je uveden ve zdrojovém kódu~\ref{code:jsAnimation}.
+
+\begin{lstlisting}[caption=jQuery Animace,label=code:jsAnimation]
+// Animace prùhlednosti z aktuální hodnoty na hodnotu 0.0 za èas 1000 ms.
+// Po dokonèení animace je zavolána anonymní funkce mìnící vrstvu,
+// ve které se prvek zobrazuje.
+$("#item").animate({'opacity':'0.0'}, 1000, function(){
+    $("#item").css({'z-index':'-1'});
+});
+\end{lstlisting}
+
+\section{JSON}
+\label{section:JSON}
+JSON, neboli JavaScript Object Notation je otevøený standard urèený pro výmìnu dat. Jeho notace je odvozena od JavaScriptu, co¾ oproti dal¹ímu roz¹íøenému formátu pro pøenos dat - XML, usnadòuje práci s daty v tomto programovacím jazyku. XML doká¾e svým znaèkováním lépe popsat kontext toho, co pøená¹í, av¹ak za cenu vìt¹ího objemu dat. Proto je také JSON chápán jako odlehèená verze XML. JSON není pou¾it pouze v programovacím jazyku JavaScript, av¹ak v dne¹ní dobì mù¾eme nalézt jeho syntaktické analyzátory i v knihovnách mnohých dal¹ích jazykù.\cite{flanagan2006javascript} \\ \\
+JSON je zalo¾en na dvou strukturách:
+\begin{itemize}
+\item Kolekce párù název/hodnota. Ta bývá v rozlièných jazycích realizována jako objekt, záznam (record), struktura (struct), slovník (dictionary), hash tabulka, klíèový seznam (keyed list), nebo asociativní pole.
+\item Tøídìný seznam hodnot. Ten je ve vìt¹inì jazykù realizován jako pole, vektor, seznam (list) nebo posloupnost (sequence).
+\end{itemize}
+
+Na následujících diagramech je znázornìna JSON syntaxe zápisu objektu (\figurename\ \ref{fig:jsonObject}), pole (\figurename\ \ref{fig:jsonArray}) a hodnoty (\figurename\ \ref{fig:jsonValue}).
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{jsonObject}
+\caption{JSON Objekt}
+\label{fig:jsonObject}
+\end{figure}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{jsonArray}
+\caption{JSON Pole}
+\label{fig:jsonArray}
+\end{figure}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{jsonValue}
+\caption{JSON Hodnota}
+\label{fig:jsonValue}
+\end{figure}
+
+JSON je ve høe pou¾it pro reprezentaci herních úrovní. Vzhledem k tomu, ¾e pøi pou¾ití jakéhokoliv jiného formátu by bylo potøeba na vstupu provádìt jeho parsování, co¾ by hru zbyteènì zpomalovalo, je tento formát v podstatì jediným vhodným kandidátem.
+
+\section{Lineární algebra pro 3D grafiku}
+\label{section:linearniAlgebra}
+Lineární algebra je ta èást matematiky, která se zabývá vektory a maticemi. Pro porozumìní 3D grafice a WebGL je dobré mít alespoò základní znalosti v tomto oboru. Vzhledem k rozsahu této práce není mo¾né zmínit v¹e, a proto jsou pojmy jako souøadný systém, vektory a jejich skalární a vektorový souèin pova¾ovány za znalost ètenáøe. Následující text se soustøedí na homogenní souøadnice, matice a transformace ve 3D grafice.
+
+\subsection*{Homogenní souøadnice}
+\label{subsection:homogenniSouradnice}
+V 3D prostoru je mo¾né bod\footnote{Ve 3D grafice nazývaný \textit{vertex}} definovat pomocí tøí souøadnic. To v¹ak mù¾e být matoucí v tom, ¾e body a vektory jsou definovány stejným zpùsobem. S homogenními souøadnicemi pøidáváme ètvrtou souøadnici, která je znaèena jako \textit{w}. Pro vektory je pak $w=0$, a pokud je $w!=0$, pak homogenní souøadnice definují bod. Homogenní bod lze pøevést na tøíprvkový bod vydìlením v¹ech souøadnic souøadnicí homogenní. Pro pøevod tøíprvkového bodu na bod homogenní pak staèí pøidat jako homogenní souøadnici hodnotu 1. Homogenní souøadnice se pou¾ívají z toho dùvodu, ¾e ve 3D grafice jsou nejèastìj¹í operací rùzné transformace, které jsou popsány pomocí $4\times4$ matic. Abychom mohli bod pomocí tìchto matic transformovat, je nutné, aby byl bod popsán právì ètyømi souøadnicemi.
+
+\subsection*{Matice}
+\label{subsection:matice}
+Matice je slo¾ena z øádkù a sloupcù. Elementy uvnitø matice se nazývají prvky matice a dle poètu øádkù a sloupcù rozli¹ujeme rùzné její dimenze. Nejèastìji pou¾ívaným typem jsou ve WebGL matice se ètyømi øádky a ètyømi sloupci. Tyto pak oznaèujeme jako $4\times4$ matice.
+
+\begin{equation}
+ M = \begin{bmatrix}
+       m_{00} & m_{01} & m_{02} & m_{03}     \\[0.3em]
+       m_{10} & m_{11} & m_{12} & m_{13}     \\[0.3em]
+       m_{20} & m_{21} & m_{22} & m_{23}     \\[0.3em]
+       m_{30} & m_{31} & m_{32} & m_{33}     \\[0.3em]
+     \end{bmatrix}
+\end{equation}
+
+Maticím s jedním sloupcem ($m \times 1$) se také jinak øíká sloupcový vektor a maticím s jedním øádkem øádkový vektor ($1 \times m$).
+
+\begin{align}
+%\begin{split}
+ V = \begin{bmatrix}
+       v_{0} \\[0.3em]
+       v_{1} \\[0.3em]
+       v_{2} \\[0.3em]
+       v_{3} \\[0.3em]
+     \end{bmatrix} \\
+%\end{split}
+%\begin{split}
+V = \begin{bmatrix}
+       v_{0} & v_{1} & v_{2} & v_{3}  \\[0.3em]
+     \end{bmatrix}
+%\end{split}\tag{2.2a, 2.2b} 
+\end{align}
+%\tag{1a,b} 
+
+\myparagraph{Souèet a rozdíl matic}
+Souèet a rozdíl je mo¾ný, pokud mají matice stejné dimenze. Souèet, nebo rozdíl pak probíhá prvek po prvku.
+
+
+\begin{align}
+%\begin{split}
+ A = \begin{bmatrix}
+       1 & 5 & 3 \\[0.3em]
+       4 & 4 & 1 \\[0.3em]
+     \end{bmatrix} \\
+%\end{split}
+%\begin{split}
+ B = \begin{bmatrix}
+       5 & 3 & 3 \\[0.3em]
+       2 & 5 & 2 \\[0.3em]
+     \end{bmatrix} \\
+%\end{split}\tag{2.3a, 2.3b} 
+%\end{align}
+%\begin{align}
+ A + B = \begin{bmatrix}
+       6 & 8 & 6 \\[0.3em]
+       6 & 9 & 3 \\[0.3em]
+     \end{bmatrix}
+\end{align}
+
+\myparagraph{Násobení matic}
+Násobení matic je ve 3D grafice velmi dùle¾itou operací. Definice násobení je taková, ¾e dvì matice mohou být vzájemnì vynásobeny pouze tehdy, kdy¾ se poèet sloupcù první matice rovná poètu øádkù matice druhé. Výsledná matice má pak poèet øádkù rovný matici první a poèet sloupcù matici druhé.
+
+\begin{align}
+[m \times p][p \times n] = [m \times n]
+\end{align}
+
+Prvky \textit{ij} výsledné matice vzniknou skalárním vynásobením øádku \textit{i} matice \textbf{A} a sloupce \textit{j} matice \textbf{B}.
+
+\begin{align}
+M = 
+\begin{bmatrix*}[r]
+  -3 & 1 \\
+  -2 & 2 \\
+  -4 & 5 \\
+\end{bmatrix*} \\
+N =
+\begin{bmatrix*}[r]
+  -4 & 3 \\
+   3 & 5 \\
+\end{bmatrix*}
+\end{align} 
+\begin{align}
+M \times N = 
+\begin{bmatrix*}[r]
+  (-3) \times (-4) + 1 \times 3 & (-3) \times 3 + 1 \times 5 \\
+  (-2) \times (-4) + 2 \times 3 & (-2) \times 3 + 2 \times 5 \\
+  (-4) \times (-4) + 5 \times 3 & (-4) \times 3 + 5 \times 5 \\
+\end{bmatrix*}
+=
+\begin{bmatrix*}[r]
+  15 & -4 \\
+  14 & 4 \\
+  31 & 13 \\
+\end{bmatrix*}
+\end{align}
+
+
+\myparagraph{Matice identity a inverzní matice}
+Matice identity je takovou maticí, ¾e pokud s ní vynásobíme jakoukoliv matici jinou, tak získáme opìt tu samou.
+
+\begin{align}
+M \times I = I \times M = M
+\end{align}
+
+Matice identity je v¾dy ètvercová (stejný poèet sloupcù jako øádkù), na své diagonále má prvky rovny 1 a mimo diagonálu 0.
+
+\begin{align}
+I = 
+\begin{bmatrix*}[r]
+  1 & 0 & 0 & 0 \\
+  0 & 1 & 0 & 0 \\
+  0 & 0 & 1 & 0 \\
+  0 & 0 & 0 & 1 \\
+\end{bmatrix*}
+\end{align}
+
+Nyní, kdy¾ víme, co je to matice identity, mù¾eme pøistoupit k definici matice inverzní. Pro jakékoliv èíslo $x$ (kromì 0) nalezneme èíslo $1/x$ (zapisováno také jako $x^{-1}$), které pøi vynásobení touto inverzní hodnotou dává jako svùj výsledek hodnotu 1. Podobnì je definována i matice inverzní, kterou oznaèujeme jako $M^{-1}$.
+
+\begin{align}
+M \times M^{-1} = M^{-1} \times M = 1
+\end{align}
+
+Je dùle¾ité poznamenat, ¾e pouze ètvercové matice mají matici inverzní.
+
+\myparagraph{Transponovaná matice}
+Transponovaná matice vznikne prohozením svých øádkù se sloupci. Matice je definována pro jakékoliv dimenze a oznaèuje se jako $M^{T}$. Vzhledem k tomu, ¾e ve WebGL se pou¾ívají matice $4\times4$, jsou i zde pøíklady uvedeny v tìchto dimenzích.
+
+\begin{align}
+ M = 
+\begin{bmatrix*}[r]
+  1 & 2 & 3 & 4 \\
+  5 & 6 & 7 & 8 \\
+  9 & 10 & 11 & 12 \\
+  13 & 14 & 15 & 16 \\
+\end{bmatrix*}
+\end{align}
+
+\begin{align} 
+M^T = 
+\begin{bmatrix*}[r]
+  1 & 5 & 9 & 13 \\
+  2 & 6 & 10 & 14 \\
+  3 & 7 & 11 & 15 \\
+  4 & 8 & 12 & 16 \\
+\end{bmatrix*}
+\end{align}
+
+\subsection*{Transformace}
+\label{subsection:transformace}
+Transformace je operace, která na svém vstupu pøijímá jakousi entitu, jakou je napøíklad bod, nebo vektor, a nìjakým zpùsobem ji modifikuje. Speciálním typem transformace je pak transformace lineární, co¾ je zobrazení $f$ z jednoho vektorového prostoru do druhého $f: V \rightarrow W$, které zachovává vektorové operace sèítání a násobení skalárem. Název \textit{lineární} je odvozen z faktu, ¾e grafem obecného lineárního zobrazení z reálných èísel do reálných èísel je pøímka.
+
+Mìjme dva vektory $u$, $v$ a transformaci reprezentovanou pomocí funkce $f$. Pak lineární transformací je operace, která splòuje následující podmínky:
+
+\begin{align}
+\begin{split}
+f(u) + f(v) = f(u+v) 
+\end{split}
+\begin{split}
+ (aditivita)
+\end{split} \\
+\begin{split}
+kf(u) = f(ku)
+\end{split}
+\begin{split}
+ (homogenita)
+ \end{split}
+\end{align}
+
+
+Mezi lineární transformace patøí napøíklad posunutí (translace), rotace, zmìna mìøítka (scaling), èi zkosení (shearing). Násobením transformaèních matic lze vytváøet ze základních transformací transformace komplexní. Pøi násobení v¹ak musíme dávat pozor na poøadí, ve kterém jsou matice násobeny. Násobení matic toti¾ není komutativní operací. Jakákoliv transformace bodu, nebo vektoru v 3D prostoru mù¾e být vyjádøena pomocí $4 \times 4$ matice.
+
+\begin{align} 
+Mv = \begin{bmatrix*}[r]
+  m_{00} & m_{01} & m_{02} & m_{03} \\
+  m_{10} & m_{11} & m_{12} & m_{13} \\
+  m_{20} & m_{21} & m_{22} & m_{23} \\
+  m_{30} & m_{31} & m_{32} & m_{33} \\
+\end{bmatrix*}
+\begin{bmatrix*}[r]
+ v_{0} \\
+ v_{1} \\
+ v_{2} \\
+ v_{3} \\
+\end{bmatrix*} =
+\begin{bmatrix*}[r]
+  m_{00}v_{0} & m_{01}v_{1} & m_{02}v_{2} & m_{03}v_{3} \\
+  m_{10}v_{0} & m_{11}v_{1} & m_{12}v_{2} & m_{13}v_{3} \\
+  m_{20}v_{0} & m_{21}v_{1} & m_{22}v_{2} & m_{23}v_{3} \\
+  m_{30}v_{0} & m_{31}v_{1} & m_{32}v_{2} & m_{33}v_{3} \\
+\end{bmatrix*}
+\end{align}
+
+\pagebreak
+\myparagraph{Translace}
+Translace je lineární transformací, která posouvá bod v prostoru. Translaèní matice vypadá následovnì:
+
+\begin{align}
+T(t_x, t_y, t_z) = 
+\begin{bmatrix*}[r]
+ 1 & 0 & 0 & t_x \\
+ 0 & 1 & 0 & t_y \\
+ 0 & 0 & 1 & t_z \\
+ 0 & 0 & 0 & 1 \\
+\end{bmatrix*}
+\end{align}
+
+Uvedená translaèní matice posouvá bod s ofsetem, který je reprezentován pomocí vektoru $(t_x, t_y, t_z)$. Diagram~\ref{fig:translation} znázoròuje translaci bodù krychle násobením s následující maticí:
+
+\begin{align}
+T(4, 5, 0) = 
+\begin{bmatrix*}
+1 & 0 & 0 & 5 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix*}
+\end{align}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{translation}
+\caption{Translace}
+\label{fig:translation}
+\end{figure}
+
+
+\subsection*{Rotace}
+Tato transformace rotuje bod, èi vektor o zadaný úhel kolem poèátku souøadného systému $[0, 0, 0]$. Bì¾nì se pou¾ívají rotaèní matice pro rotaci kolem osy\footnote{Rotace se øídí tzv. pravidlem pravé ruky. Palec smìøuje v kladném smìru osy a zbylé zatoèené prsty ruky naznaèují smìr kladné rotace.} x, y a z. 
+
+\begin{align}
+R_x(\phi) = 
+\begin{bmatrix*}
+1 & 0 & 0 & 0 \\
+0 & \cos\phi & -\sin\phi & 0 \\
+0 & \sin\phi & \cos\phi & 0 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix*}
+\end{align}
+
+\begin{align}
+R_y(\phi) = 
+\begin{bmatrix*}
+\cos\phi & 0 & \sin\phi & 0 \\
+0 & 1 & 0 & 0 \\
+-\sin\phi & 0 & \cos\phi & 0 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix*}
+\end{align}
+
+\begin{align}
+R_z(\phi) = 
+\begin{bmatrix*}
+\cos\phi & -\sin\phi & 0 & 0 \\
+\sin\phi & \cos\phi & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix*}
+\end{align}
+
+Diagram~\ref{fig:rotation} znázoròuje rotaci bodù krychle kolem poèátku soustavy souøadnic s vyu¾itím této transformaèní matice:
+
+\begin{align}
+R_x(30^{\circ}) = 
+\begin{bmatrix*}
+1 & 0 & 0 & 0 \\
+0 & \cos(30^{\circ}) & -\sin(30^{\circ}) & 0 \\
+0 & \sin(30^{\circ}) & \cos(30^{\circ}) & 0 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix*}
+\end{align}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{rotation}
+\caption{Rotace}
+\label{fig:rotation}
+\end{figure}
+
+Dal¹ími transformacemi pou¾ívanými ve 3D grafice je tzv. scaling, který zvìt¹uje, èi zmen¹uje objekt a pak tzv. shearing, který doká¾e objekt zkosit dle dané osy. Tyto dvì transformace v¹ak nejsou pøi implementaci hry vyu¾ity, a tudí¾ zde nebudou zmínìny.
+
+\pagebreak
+\section{WebGL}
+\label{section:webgl}
+WebGL je nízkoúrovòové aplikaèní rozhraní pro zobrazení pokroèilé 3D grafiky na webu. Je zalo¾eno na OpenGL ES 2.0 a umo¾òuje programátorovi pou¾ít hardwarovì akcelerované\footnote{K hardwarové akceleraci je nutno vlastnit GPU s podporou minimálnì shader modelu 2.0. V opaèném pøípadì lze obraz vykreslovat softwarovì.} vykreslování obrazu v kontextu HTML a JavaScriptu. Vykreslovací plochou, která je zde pou¾ita je HTML5 \texttt{<canvas>} element a jeho \texttt{webgl}, resp. \texttt{experimental-webgl} kontext.~\cite{seidelin2011html5}
+
+\subsection*{Historie WebGL}
+\label{subsection:historieWebGL}
+První experimenty s 3D grafikou v \texttt{<canvas>} elementu provádìl Vladimir Vukiæeviæ ze spoleènosti Mozilla. Výsledkem jeho pokusù se stal prototyp, který nazval Canvas 3D. V roce 2009 vytvoøila Khronos Group novou pracovní skupinu pro WebGL, která byla slo¾ena z hlavních tvùrcù webových prohlí¾eèù vèetnì firem jako Apple, Google, Mozilla a Opera. Khronos Group je neziskovou organizací, která vytváøí a spravuje otevøené standardy a aplikaèní rozhraní. Byla zalo¾ena roku 2000 a mimo jiné stojí i za standardy jako OpenGL, èi vý¹e zmínìným OpenGL ES, které je primárnì urèeno pro vestavìné systémy.~\cite{anyuru2012professional}
+
+Finální specifikace WebGL 1.0\footnote{\url{http://www.khronos.org/registry/webgl/specs/1.0/}} byla vydána v bøeznu roku 2011 a její implementaci mù¾eme nalézt v prohlí¾eèích jako Google Chrome, Mozilla Firefox, Safari a v poèáteèních fázích implementace v prohlí¾eèi Opera. V pøípadì Microsoft Internet Exploreru je situace ponìkud odli¹ná. Microsoft neohlásil ¾ádný zámìr v podpoøe WebGL ve svém prohlí¾eèi. U¾ivatelé, kteøí chtìjí WebGL pou¾ívat, jsou tedy nuceni pøejít k jinému prohlí¾eèi.~\cite{anyuru2012professional}
+
+\subsection*{Výhody WebGL}
+\label{subsection:vyhodyWebGL}
+V dobách, kdy web jako takový zaèínal, byl jeho obsah vytvoøen ze statických dokumentù. Hlavní prací webových prohlí¾eèù tehdy bylo takovýto obsah získat a zobrazit. V prùbìhu èasu v¹ak webové technologie znaènì pokroèily a nyní tak jejich prostøednictvím mù¾eme pøistupovat k plnohodnotným webovým aplikacím s bohatým u¾ivatelským rozhraním a audiovizuálním obsahem. Tyto aplikace se nyní stávají alternativou k aplikacím nativním.~\cite{anyuru2012professional} \\ \\
+Jejich hlavními výhodami jsou:
+\begin{itemize}
+\item Rychlá \textbf{dostupnost} a jednoduchá \textbf{distribuce} mezi mnoho u¾ivatelù.
+\item \textbf{Snadná údr¾ba a aktualizace aplikací.} Pokud je v aplikaci nalezena chyba, nebo pokud chceme roz¹íøit její funkcionalitu, pak v¹e, co je potøeba, je aktualizovat aplikaci na serveru a u¾ivatelé mají ihned pøístup k její nové verzi.
+\item \textbf{Multiplatformnost aplikací.} V¹e, co u¾ivatel potøebuje je kompatibilní webový prohlí¾eè schopný zobrazit námi definovaný obsah.
+\end{itemize}
+
+Oproti nativním aplikacím nejsou ty webové obsahem tak bohaté, av¹ak s pøíchodem HTML5 zaèíná tento rozdíl mizet. Prostøednictvím WebGL je nyní mo¾né zobrazovat hardwarovì akcelerovanou grafiku pøímo uvnitø prohlí¾eèe. Je tak mo¾né vytvoøit 3D hry, nebo pokroèilé 3D grafické aplikace a zároveò tì¾it z výhod webu, jak byli popsány vý¹e. Technologie WebGL má navíc i dal¹í výhody, mezi nì¾ patøí napøíklad:
+\begin{itemize}
+\item WebGL je otevøený standard, který mù¾e pou¾ívat ka¾dý bez poplatkù.
+\item WebGL vyu¾ívá pøímo grafický hardware, co¾ znamená, ¾e jsou aplikace rychlé.
+\item Vzhledem k tomu, ¾e je WebGL zalo¾eno na OpenGL ES, je mo¾né vytvoøené aplikace spou¹tìt i na mnohých moderních mobilních zaøízeních.
+\end{itemize}
+
+\subsubsection*{Grafická API}
+\label{subsection:grafickaAPI}
+Existují dva fundamentální pøístupy, které jsou u grafických aplikaèních rozhraní vyu¾ity. Jsou jimi:
+\begin{itemize}
+\item immediate-mode API a 
+\item retained-mode API,
+\end{itemize}
+pøièem¾ WebGL pou¾ívá první ze zmínìných pøístupù.
+
+
+\myparagraph{Immediate-mode API} 
+U tohoto typu rozhraní je celá scéna pøekreslena s ka¾dým snímkem bez ohledu na to, zda byla zmìnìna, èi nikoliv. Grafická knihovna která zprostøedkovává rozhraní programátorovi neukládá ¾ádnou interní reprezentaci scény, která má být vykreslena. Reprezentaci scény je tak nutné uchovávat v pamìti vlastní aplikace. Tento pøístup je vysoce flexibilní a poskytuje programátorovi vìt¹í úroveò kontroly nad výsledným vykreslovaným obrazem. Na druhou stranu v¹ak tento pøístup vy¾aduje ze strany programátora více úsilí oproti pøístupu, který si popí¹eme nyní.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{immediateMode}
+\caption{Immediate-mode API}
+\label{fig:immediateMode}
+\end{figure}
+
+\myparagraph{Retained-mode API} 
+U tohoto pøístupu je interní model a ve¹keré vykreslované objekty scény obsa¾en v grafické knihovnì, která toto rozhraní programátorovi nabízí. Programátor vyu¾ívá pøístupových metod k rozhraní a knihovna sama rozhoduje o tom, zda má být scéna a s ní její interní reprezentace aktualizována, èi nikoliv. To znamená, ¾e aplikace, která rozhraní vyu¾ívá, nemusí v ka¾dém vykreslovaném snímku scénu pøekreslovat. Tento pøístup je v mnohých ohledech pro programátora ménì nároèný a pou¾ívá se napøíklad pro vykreslování vektorové grafiky (SVG). 
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{retainedMode}
+\caption{Retained-mode API}
+\label{fig:retainedMode}
+\end{figure}
+ 
+\subsection*{Tvorba obrazu v grafickém hardwaru}
+\label{subsection:tvorbaObrazu}
+WebGL je nízkoúrovòové rozhraní a pracuje tak velmi blízko grafického hardwaru. K pochopení fundamentálních konceptù pou¾itých pøi implementaci hry je tedy nejprve potøeba alespoò okrajovì osvìtlit, jakým zpùsobem grafický hardware pracuje. 
+
+Na diagramu~\ref{fig:gpuDisplay} je zjednodu¹enì znázornìn vztah grafického hardwaru k ostatním èástem systému.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{gpuDisplay}
+\caption{Vztah grafického hardwaru k ostatním èástem systému}
+\label{fig:gpuDisplay}
+\end{figure}
+
+\myparagraph{GPU}
+GPU, neboli také Graphics Processing Unit, je dedikované zaøízení, které je pøímo navr¾eno pro zobrazení grafiky. Architektura GPU je vysoce paralelizovaná a provádí operace s grafickými daty velmi rychle. Zpracování dat probíhá typicky zøetìzenì v nìkolika úrovních.
+
+\myparagraph{Framebuffer}
+Framebuffer je místem, kde je ulo¾en výsledek operací provedených na GPU. Je to pamì», která obsahuje informace nutné pro zobrazení výsledného obrazu na zobrazovací zaøízení. V jednoduchém grafickém systému mù¾e být fyzická pamì» framebufferu souèástí hlavní operaèní pamìti, av¹ak u moderních systémù je tato pamì» alokována ve speciální rychlé grafické pamìti na GPU. Framebuffer se typicky skládá ze tøí odli¹ných \textit{subbufferù}.
+
+\begin{itemize}
+\item Color Buffer
+\item Z-Buffer
+\item Stencil Buffer
+\end{itemize}
+
+\mysubparagraph{Color Buffer}
+Color buffer pøedstavuje dvourozmìrné pole, jeho¾ prvky jsou výsledné barvy pixelù obrazu. Ka¾dý z tìchto prvkù obsahuje informaci o výsledné barvì v RGB, èi RGBA formátu. Ka¾dý z barevných kanálù má alokován urèitý poèet bitù a navíc mù¾e být obsa¾ena informace o \textit{alpha} kanálu, který urèuje viditelnost daného pixelu. Celkový poèet bitù pou¾itých pro jeden pixel je oznaèován jako barevná hloubka (color depth). \\ \\ Varianty barevné hloubky:
+
+\begin{itemize}
+\item 16 bitù na pixel
+\item 24 bitù na pixel
+\item 32 bitù na pixel
+\end{itemize} 
+
+Barevná hloubka 16 bitù se èasto pou¾ívá na men¹ích zaøízeních. Je zde pou¾ito systému RGB565, který zohledòuje zvý¹enou citlivost lidského oka na zelenou barvu. Rozlo¾ení jednotlivých barevných kanálù tedy není rovnomìrné a je alokováno 5 bitù pro èervenou barvu, 6 bitù pro barvu zelenou a 5 bitù pro barvu modrou. Barevná hloubka 24 bitù má pak pro ka¾dou barvu alokováno po osmi bitech a v pøípadì barevné hloubky 32 bitù je dal¹ích 8 bitù alokováno pro alpha kanál.
+
+\mysubparagraph{Z-Buffer}
+Jak ji¾ bylo uvedeno v pøedchozím odstavci, color buffer typicky obsahuje barvy pixelù výsledného obrazu. V zobrazované scénì jsou v¹ak nìkteré vykreslované objekty pøekryty jinými a pixely, které tìmto zakrytým objektùm nále¾í, by tak nemìly být viditelné. Toho je docíleno pomocí z-bufferu, který má stejný poèet prvkù jako color buffer, av¹ak není zde ulo¾ena barva, nýbr¾ vzdálenost pozorovatele od nejbli¾¹ího objektu scény. Ta následnì rozhoduje o tom, jaký objekt má být v daném pixelu vykreslen a který nikoliv. V souvislosti s implementací je tento buffer vyu¾íván pouze v pøípadì, ¾e objekty scény nejsou zprùhlednìny.
+
+\mysubparagraph{Stencil Buffer}
+Jako doplnìk ke døíve popsaným bufferùm je na moderním grafickém hardwaru pøítomen i stencil buffer, který urèuje to, kam má být aktuálnì zpracovávaný objekt scény vykreslen v rámci color bufferu. V praxi je tento buffer vyu¾it napøíklad pro vykreslování stínù. Stíny nejsou v implementaci pou¾ity, proto se ji¾ dále stencil bufferem nebudeme zabývat.
+
+\subsection*{Grafická pipeline}
+\label{subsection:pipeline}
+Webové aplikace jsou typicky slo¾eny z HTML, CSS a JavaScriptových souborù, které jsou interpretovány a zobrazovány prohlí¾eèem. Aplikace vyu¾ívající WebGL navíc obsahuje zdrojový kód shaderù a data, která reprezentují 3D scénu. JavaScript vyu¾ívá rozhraní WebGL, aby pøedal této knihovnì zdrojové kódy programovatelných souèástí grafické pipeline a data, která reprezentují vykreslovaný 3D model. Poté, co jsou data knihovnì pøedána, je výsledek vykreslen do tzv. \textit{drawing bufferu}, co¾ je ve své podstatì framebuffer pro WebGL. Stejnì tak jako framebuffer obsahuje color, stencil a z-buffer, av¹ak jeho obsah je nejdøíve spojen se zbytkem webové stránky a teprve poté konèí ve framebufferu fyzickém. V implementaci hry je vyu¾ito 32 bitové varianty drawing bufferu a je tak tedy mo¾né vyu¾ít alpha kanálu na prolínání vykreslované 3D grafiky se svým okolím, resp. se zbytkem webové stránky. Grafická pipeline je zobrazena na diagramu~\ref{fig:gpuPipeline}.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{gpuPipeline}
+\caption{GPU pipeline}
+\label{fig:gpuPipeline}
+\end{figure}
+
+K tomu, abychom získali realistickou 3D scénu nestaèí pouze vykreslit objekty na urèité pozice. Musíme také vzít v úvahu, jak budou objekty vypadat, pokud na nì bude dopadat svìtlo ze svìtelných zdrojù scény. Obecnì se technice, která se pou¾ívá ve spojitosti s pùsobením svìtla na rùzné typy materiálù øíká~\textit{shading}. Ve WebGL je shading rozdìlen do dvou èástí, jejich¾ chování je mo¾né naprogramovat. \\ \\ Programovatelnými souèástmi grafické pipeline jsou:
+\begin{itemize}
+\item Vertex Shader
+\item Fragment Shader
+\end{itemize}
+
+\myparagraph{Vertex Shader}
+První èástí grafické pipeline, do které vstupují data pøedaná WebGL knihovnì, je vertex shader. Jak ji¾ jeho název napovídá, provádí shading jednotlivých vertexù vykreslované scény. Ne¾ v¹ak samotný proces shadingu zapoène, je nutno vertexy transformovat a umístit tak objekt, jemu¾ vertexy nále¾í, na po¾adovanou pozici. Toho je docíleno pomocí transformaèních matic, které jsou popsány v podkapitole~\ref{section:linearniAlgebra}. Vertex shader pou¾ívá následující vstupy:
+\begin{itemize}
+\item Zdrojový kód vertex shaderu, který je zapsán v OpenGL ES Shading Language (GLSL ES).
+\item Atributy, které definují data specifická ka¾dému vertexu. Typicky je to jeho pozice, normála a barva.
+\item Tzv. \textit{uniform} promìnné, které jsou pro v¹echny vertexy objektu konstantní a lze je zmìnit a¾ po dokonèení operace vykreslování. Jedná se o transformaèní matice a dále pak napøíklad o pozice, na kterých se nachází svìtelné zdroje.
+\end{itemize}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{vertexShader}
+\caption{Vertex Shader}
+\label{fig:vertexShader}
+\end{figure}
+
+Na diagramu~\ref{fig:vertexShader} jsou pak jestì znázornìny zabudované a u¾ivatelky definované \textit{varying} promìnné. Vyu¾ití varying promìnných je v delegaci informací z vertex shaderu do fragment shaderu. Jednou z nejdùle¾itìj¹ích speciálních zabudovaných promìnných je \texttt{gl\_Position}, která po práci vertex shaderu udává pozici, na které se vertex nachází. Popis vertex shaderu probíhá pomocí jazyka GLSL, který je svou syntaxí podobný programovacímu jazyku C. Pøíklad takového popisu je uveden ve zdrojovém kódu~\ref{code:vertexShader}
+
+\begin{lstlisting}[caption=Ukázka zdrojového kódu GLSL pro vertex shader,label=code:vertexShader]
+// Deklarace atributù vertexu
+// Vektor pozice vertexu (XYZ)
+attribute vec3 aVertexPos;
+// Barva vertexu (RGBA)
+attribute vec4 aVertexColor;
+
+// Uniform promìnné
+// Model-View Matice (4x4)
+uniform mat4 uMVMatrix;
+// Projekèní matice (4x4)
+uniform mat4 uPMatrix;
+
+// Deklarace varying promìnné obsahující výstupní barvu vertexu, 
+// která je vstupem pro fragment shader.
+varying vec4 vColor;
+
+void main() {
+	// Transformace vertexu projekèní a model-view maticí, kde
+	// gl_Position udává jeho výslednou pozici ve scénì.
+	gl_Position = UPMatrix * uMVMatrix * vec4(aVertexPos, 1.0);
+	
+	// Barva vertexu je poslána dále do fragment shaderu	.
+	vColor = aVertexColor;
+}
+\end{lstlisting}
+\pagebreak
+\myparagraph{Sestavení primitiv}
+V tomto kroku jsou sestaveny jednotlivé vertexy, které pro¹ly skrze vertex shader, do geometrických primitiv, jakými jsou napøíklad trojúhelníky èi hrany. Následnì je potøeba rozhodnout o tom, zda je sestavený objekt v regionu, který je aktuálnì viditelný na obrazovce. Tento region je oznaèován jako \textit{frustrum} a je pøedstavován komolým jehlanem s obdélníkovou, èi ètvercovou podstavou. Objekt který je uvnitø frustra je pøedán ke zpracování dal¹ím èástem grafické pipeline. Objekty, které jsou kompletnì mimo frustrum, se odstraní, a ty, které jsou vnì pouze èásteènì, budou oøíznuty. Frustrum je znázornìno na diagramu~\ref{fig:frustrum}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{frustrum}
+\caption{Frustrum}
+\label{fig:frustrum}
+\end{figure}
+
+\myparagraph{Rasterizace}
+Dal¹ím krokem je pøevod primitiv na fragmenty (diagram~\ref{fig:planeFragment}), pod kterými si mù¾eme pøedstavit jednotlivé pixely obrazovky. Fragmenty dále putují do fragment shaderu.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{planeFragment}
+\caption{Fragmenty}
+\label{fig:planeFragment}
+\end{figure}
+
+\myparagraph{Fragment shader}
+Fragment shader je druhou programovatelnou souèástí grafické pipeline. Jak ji¾ bylo zmínìno, fragment odpovídá pixelu, av¹ak ne v¹echny fragmenty se pixely stanou. Fragmenty toti¾ mohou být odstranìny v dal¹ích èástech pipeline. Fragment shader se svými vstupy a výstupy je znázornìn na diagramu~\ref{fig:fragmentShader}. Vstupem fragment shaderu jsou:
+\begin{itemize}
+\item Zdrojový kód fragment shaderu v jazyku OpenGL ES Shading Language.
+\item Speciální zabudované promìnné, mezi nì¾ patøí napøíklad \texttt{gl\_PointCoord}.
+\item Varying promìnné, které byli poslány skrze vertex shader.
+\item Uniform promìnné, které obsahují konstanty spoleèné v¹em fragmentùm vykreslovaného objektu.
+\item Samplery, co¾ jsou speciální uniform promìnné urèené pro texturování.
+\end{itemize}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.8\textwidth]{fragmentShader}
+\caption{Fragment Shader}
+\label{fig:fragmentShader}
+\end{figure}
+
+
+
+Jak ji¾ bylo zmínìno døíve, varying promìnné slou¾í k posílání informací skrze vertex shader. Obecnì v¹ak platí, ¾e objekt má více fragmentù ne¾ vertexù. Obsah varying promìnných, který je zaslán skrze vertex shader, je lineárnì interpolován pro ka¾dý fragment. 
+
+Výsledek práce fragment shaderu je zapsán do zabudované promìnné \texttt{gl\_FragColor}, která následnì obsahuje výslednou barvu daného fragmentu. Ve zdrojovém kódu~\ref{code:fragmentShader} je uveden pøíklad GLSL programu fragment shaderu, který pro ka¾dý fragment získá lineárnì interpolovanou hodnotu s jeho barvou a ulo¾í ji jako svùj výstup.
+
+\label{code:fragmentShader}
+\begin{lstlisting}[caption=Pøíklad jednoduchého GLSL programu fragment shaderu]
+varying ver4 vColor;
+void main(){
+	gl_FragColor = vColor;
+}
+\end{lstlisting}
+
+\myparagraph{Per-Fragment operace}
+Ka¾dý fragment, který projde fragment shaderem, je postoupen do dal¹ího bloku pipeline, která se skládá z nìkolika èástí provádìjící tzv. per-fragment operace. Ka¾dá z operací mù¾e ovlivnit výsledný pixel v drawing bufferu, av¹ak v implementaci je vyu¾ito pouze blendingu a depth buffer testu. Zbylé èásti jsou uvedeny pro úplnost popisu pipeline.
+
+\mysubparagraph{Scissor test}
+Scissor test urèuje, zda je zpracovávaný fragment uvnitø pravoúhlého rovnobì¾níku, který je definován jedním bodem, vý¹kou a ¹írkou. Fragmenty mimo tento rovnobì¾ník jsou zahozeny, ostatní pokraèují dále v cestì grafickou pipeline.
+
+\mysubparagraph{Multisample fragment operace}
+Tato èást pipeline modifikuje aplha kanál fragmentu, èím¾ je docíleno vyhlazení hran vykreslovaných objektù. Tato technika se obecnì oznaèuje jako \textit{anti-aliasing}.
+
+\mysubparagraph{Stencil test}
+Zde se fragment porovnává s nastavenou referenèní hodnotou. Na základì výsledku porovnání je fragment opìt zahozen, nebo postoupen dále.
+
+\mysubparagraph{Depth buffer test}
+Vzhledem k tomu, ¾e se v témìø ka¾dé vykreslované scénì objekty pøekrývají, je nutné do color bufferu vykreslovat pouze ty objekty, které jsou viditelné. Tento test ve spolupráci s depth bufferem rozhoduje o tom, zda fragment vykreslovat, èi nikoliv.
+
+\mysubparagraph{Blending}
+V dal¹ím kroku oznaèovaným jako blending jsou kombinovány barvy fragmentù, které jsou momentálnì vykresleny do color bufferu na odpovídající pozici. Toho je v implementaci vyu¾ito pro vykreslování prùhledných objektù scény.
+
+\mysubparagraph{Dithering}
+Posledním krokem pøed vykreslením do color drawing bufferu je tzv. dithering. Vzhledem k tomu, ¾e color buffer má omezený poèet bitù k reprezentaci ka¾dé z barev, dithering tyto slo¾í tak, ¾e vytvoøí iluzi toho, ¾e máme k dispozici barev více.
+
+%\subsection*{WebGL Frameworky}
+%\label{subsection:webGLFrameworky}
+%Specifikace neexistuje dlouhou dobu, av¹ak ji¾ dnes mù¾eme nalézt mnohé frameworky, které programování s WebGL znaènì usnadòují. Vzhledem k tomu, ¾e pou¾ití WebGL frameworkù nebylo pøi implementaci povoleno, má následující pøehled pouze informativní charakter.
+
+%Mezi nejznámìj¹í WebGL frameworky patøí:
+%\begin{itemize}
+%\item C3DL
+%\item Copperlicht
+%\item GLGE
+%\item SceneJS
+%\item Three.js
+%\item WebGLU
+%\end{itemize}
+
+%\subsection*{WebGL a bezpeènost}
+%WebGL pøistupuje pøímo ke grafickému hardwaru, tudí¾ se mohou objevit situace, ve kterých je mo¾né tuto skuteènost zneu¾ít a vytvoøit takový %WebGL dokument, který zpùsobí to, ¾e grafická karta pøestane reagovat na ostatní aplikace. Systémy Microsoft Windows tuto skuteènost detekují a %resetují grafickou kartu, av¹ak na systémech firmy Apple není tato detekce pøítomna a takový dokument by potenciálnì mohl zapøíèinit pád %systému. U Linuxu zále¾í na verzi pou¾itého ovladaèe grafické karty. Nìkteré z nich blokaci detekují a nìkteré nikoliv (napøíklad souèasný %ovladaè grafických karet NVIDIA Nouveau). 
+
+%\subsection*{Rychlost JavaScriptu v souvislosti s WebGL}
+%Interprety JavaScriptu v prohlí¾eèích se neustále vylep¹ují a dosahují tak vy¹¹ích rychlostí, av¹ak pro výpoèetnì slo¾ité operace je jeho %rychlost stále nízká. Pokud tedy chceme dosáhnout rychlého vykreslování, je potøeba pøenechat co nejvíce práce grafickému hardwaru a jeho %shaderùm. Na diagramu~\ref{webglPerformace} je uvedeno srovnání jednotlivých webových prohlí¾eèù s  
+
+%doplnit osvetlovaci modely a opacity
+
+

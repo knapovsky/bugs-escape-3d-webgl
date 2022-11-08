@@ -1,0 +1,381 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Bug's Escape 2 WebGL</title>
+<link href="./favicon.ico" rel="icon" type="image/x-icon" />
+
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+
+<!-- VERTEX SHADER GLSL CODE -->
+<script id="per-fragment-lighting-vs" type="x-shader/x-vertex">
+// Vertex positions
+attribute vec3 aVertexPosition;
+// Vertex normals
+attribute vec3 aVertexNormal;
+// Texture cordinations
+attribute vec2 aTextureCoord;
+// Lightmap coordionations
+attribute vec2 aLightmapCoord;
+
+// Model-view Matrix
+uniform mat4 uMVMatrix;
+// Projection Matrix
+uniform mat4 uPMatrix;
+// Normal Matrix
+uniform mat3 uNMatrix;
+
+// Texture coordinations out
+varying vec2 vTextureCoord;
+// Normal out
+varying vec3 vTransformedNormal;
+// Vertex position out
+varying vec4 vPosition;
+// Lightmap coordination out
+varying vec2 vLightmapCoord;
+
+
+void main(void) {
+
+	// Transform vertex according to model-view matrix
+	vPosition = uMVMatrix * vec4(aVertexPosition, 1);
+	// Project vertex
+	gl_Position = uPMatrix * (vPosition);
+	// Pass texture coords
+	vTextureCoord = aTextureCoord;
+	// Pass lightmap coords
+	vLightmapCoord = aLightmapCoord;
+	// Transform normals
+	vTransformedNormal = uNMatrix * aVertexNormal;
+}
+</script>
+
+<!-- FRAGMENT SHADER GLSL CODE -->
+<script id="per-fragment-lighting-fs" type="x-shader/x-fragment">
+// Medium precision
+precision mediump float;
+
+/* --- Varying variables --- */
+// Texture coordinations
+varying vec2 vTextureCoord;
+// Lightmap coordination
+varying vec2 vLightmapCoord;
+// Normal vectors
+varying vec3 vTransformedNormal;
+// Vertex position
+varying vec4 vPosition;
+/* ---                   --- */
+
+// Specular highlignts level
+uniform float uMaterialShininess;
+// Alpha level
+uniform float uAlpha;
+
+/* --- Uniform variables --- */
+// Use specular?
+uniform bool uShowSpecularHighlights;
+// Use lightning?
+uniform bool uUseLighting;
+// Use textures?
+uniform bool uUseTextures;
+// Use lightmaps?
+uniform bool uUseLightmap;
+
+// Ambient light color vector
+uniform vec3 uAmbientColor;
+
+/* How many lights to use - OBSOLETE 
+uniform int lightCount;
+uniform bool useMultipleLights;
+uniform vec3 uPointLightingLocationArray[LIGHTS];
+*/
+
+// Point light location
+uniform vec3 uPointLightingLocation;
+// Point light specular color
+uniform vec3 uPointLightingSpecularColor;
+// Point light diffuse color
+uniform vec3 uPointLightingDiffuseColor;
+
+// Texture sampler
+uniform sampler2D uSampler;
+// Lightmap sampler
+uniform sampler2D uLightmapSampler;
+	
+void main(void) {
+
+	vec3 lightWeighting;
+
+	/* No lightning, no lightmaps */
+    if (!uUseLighting) {
+
+    	// Constant lightning
+        lightWeighting = vec3(1.0, 1.0, 1.0);
+    	vec4 fragmentColor;
+
+    	// Sampler, coords and texture needed
+    	if (uUseTextures) {
+
+			fragmentColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+    	} 
+    	// Constant color
+    	else {
+
+			fragmentColor = vec4(0.8, 0.8, 0.8, 1);
+    	}
+
+    	// gl_FragColor contains final fragment color
+    	gl_FragColor = vec4(fragmentColor.rgb * lightWeighting, fragmentColor.a * uAlpha);
+    }
+
+    /* Lightning ON */
+    /* Phong shanding */
+	else {
+
+    	vec3 lightDirection = normalize(uPointLightingLocation - vPosition.xyz);
+    	vec3 normal = normalize(vTransformedNormal);
+
+  		float specularLightWeighting = 0.0;
+
+  		// Specular highlights weighting
+		if (uShowSpecularHighlights) {
+
+        	vec3 eyeDirection = normalize(-vPosition.xyz);
+            vec3 reflectionDirection = reflect(-lightDirection, normal);
+
+            specularLightWeighting = pow(max(dot(reflectionDirection, eyeDirection), 0.0), uMaterialShininess);
+        }
+
+        float diffuseLightWeighting = max(dot(normal, lightDirection), 0.0);
+
+        // Final light weight
+        lightWeighting = uAmbientColor + 
+        				 uPointLightingSpecularColor * 
+        				 specularLightWeighting + 
+        				 uPointLightingDiffuseColor * 
+        				 diffuseLightWeighting;
+	
+    	vec4 fragmentColor;
+    	vec4 fragmentLightmapColor;
+    	float lightmapValue;
+
+    	if (uUseTextures) {
+
+    		// Get texture color
+	 		fragmentColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t)); 
+	 		if(uUseLightmap){
+	      		//lightmapValue = texture2D(uLightmapSampler, vec2(vLightmapCoord.s, vLightmapCoord.t)).r * 255.0;
+	      		// Get lightmap color
+	    		fragmentLightmapColor = texture2D(uLightmapSampler, vec2(vLightmapCoord.s, vLightmapCoord.t));
+	    	}
+	 	}
+    	else {
+	 		
+	 		// Without texture
+			fragmentColor = vec4(0.8, 0.8, 0.8, 1);
+    	}
+
+    	if(uUseLightmap){
+
+		 	//fragmentColor.rgb * fragmentLightmapColor.rgb
+		 	// Lightmap weighting
+			vec3 lmc = (fragmentLightmapColor.rgb * fragmentLightmapColor.a);
+			gl_FragColor = vec4((lmc + lightWeighting) * fragmentColor.rgb, fragmentColor.a * uAlpha); 
+			//gl_FragColor = vec4(fragmentLightmapColor.rgb, fragmentColor.a * uAlpha); 
+		}
+    	else{
+    		// Final fragment color
+	 		gl_FragColor = vec4(fragmentColor.rgb * lightWeighting, fragmentColor.a * uAlpha);
+    	}
+	}
+}
+</script>
+
+<!-- Javascript -->
+<!-- glMatrix -->
+<script type="text/javascript" src="./js/other/glMatrix-0.9.5.min.js"></script>
+<!-- WebGL Utils -->
+<script type="text/javascript" src="./js/other/webgl-utils.js"></script>
+<!-- JQuery -->
+<script type="text/javascript" src="./js/other/jquery-1.7.2.min.js"></script>
+<!-- JQuery Plugins -->
+<script src="./js/other/jquery-css-transform.js" type="text/javascript"></script>
+<script src="./js/other/jquery-animate-css-rotate-scale.js" type="text/javascript"></script>
+<script src="./js/other/jquery-ui-1.8.19.custom.min.js" type="text/javascript"></script>
+<script src="./js/other/jquery.jplayer.min.js" type="text/javascript"></script>
+<!-- Game and Web -->
+<script type="text/javascript" src="./js/game/globals.js"></script>
+<script type="text/javascript" src="./js/game/constructors.js"></script>
+<script type="text/javascript" src="./js/game/draw.js"></script>
+<script type="text/javascript" src="./js/game/gl.js"></script>
+<script type="text/javascript" src="./js/game/handlers.js"></script>
+<script type="text/javascript" src="./js/game/helpers.js"></script>
+<script type="text/javascript" src="./js/game/loaders.js"></script>
+<script type="text/javascript" src="./js/game/logic.js"></script>
+<script type="text/javascript" src="./js/game/web.js"></script>
+<script type="text/javascript" src="./js/game/init.js"></script>
+<!-- Page name -->
+<!-- CSS -->
+<link rel="stylesheet" href="./css/reset.css" type="text/css" charset="utf-8" />
+<link rel="stylesheet" href="./css/jquery-ui-1.8.19.custom.css" type="text/css" charset="utf-8" />
+<link rel="stylesheet" href="./css/style.css" type="text/css" charset="utf-8" />
+</head>
+
+<!-- Initialize WebGL onload -->
+<body onload="webGLStart();">
+	<div id="center">
+		<!-- MENU -->
+		<div id="menu">
+			<div id="play" class="menuItem unselectable">
+			</div>
+			<div id="info" class="menuItem unselectable">
+			</div>
+			<div id="howto" class="menuItem unselectable">
+			</div>
+			<div id="controls" class="menuItem unselectable">
+			</div>
+		</div>
+		<!-- SCREEN -->
+		<div id="console">
+			<canvas id="webgl-canvas" class="overlay unselectable" onmousewheel="handleWheel();" style="border: none;" width="896" height="504">
+			</canvas>
+
+			<div id="welcomeWindow" class="unselectable overlay">
+			</div>
+
+			<!-- Screen contexts - z-index -->
+			<div id="infoWindow" class="unselectable overlay">
+			</div>
+			<div id="howtoWindow" class="unselectable overlay">
+				<ul id="howtoScreens">
+					<li id="howtoScreen1" class="unselectable insideScreen">
+					</li>
+					<li id="howtoScreen2" class="unselectable insideScreen">
+					</li>
+					<li id="howtoScreen3" class="unselectable insideScreen">
+					</li>
+				</ul>
+				<div id="howtoScreensNavigation">
+					<div id="prevHowtoScreen" class="icon"></div>
+					<div id="nextHowtoScreen" class="icon"></div>
+				</div>
+			</div>
+			<div id="controlsWindow" class="unselectable overlay">
+				<ul id="controlScreens">
+					<li id="controlScreen1" class="unselectable insideScreen">
+					</li>
+					<li id="controlScreen2" class="unselectable insideScreen">
+					</li>
+				</ul>
+				<div id="controlScreensNavigation">
+					<div id="prevControlScreen" class="icon"></div>
+					<div id="nextControlScreen" class="icon"></div>
+				</div>
+			</div>
+			<div id="notificationWindow" class="unselectable overlay">
+				<!-- Notifications -->
+				<div id="notification" class="unselectable">
+				</div>
+				<!-- Loading progress bar -->
+				<div id="progressbar" class="unselectable">
+				</div>
+			</div>
+
+			<!-- UI -->
+			<div id="ui" class="unselectable overlay">
+
+				<!-- Inventory -->
+				<div id="inventory" class="unselectable">
+					<div id="pickaxe" class="unselectable inventoryItem">
+					</div>
+					<div id="snorchel" class="unselectable inventoryItem">
+					</div>
+					<div id="weight" class="unselectable inventoryItem">
+					</div>
+					<div id="strength" class="unselectable inventoryItem">
+					</div>
+				</div>
+				<!-- Game progressbar -->
+				<div id="gameProgress" class="unselectable">
+				</div>
+
+			</div>
+
+			<div id="clippingWindow">
+			</div>
+
+     		<div id="audioPlayer">
+	     		<div id="audioPlayerAPI">
+				</div>
+				<div id="audioPlayerButtons">
+					<div id="prev" class="audioIcon" ></div>
+					<div id="playPause" class="audioIcon"></div>
+					<div id="next" class="audioIcon"></div>
+				</div>
+			</div>
+
+     		<div id="chooserButton">
+     		</div>
+
+		</div>
+		<div id="chooser" class="sliderkit photosgallery-std">
+			<!--div class="sliderkit-nav"-->
+				<div id="chooserLeftButton" class="insideChooserButton unselectable">
+					<div id="chooserArrowLeft" class="chooserArrow">
+					</div>
+				</div>
+				<!--  Clipping Window -->
+				<div id="levels" class="unselectable">
+					<ul id="levelList">
+						<li id="level1" class="level">
+						</li>
+						<li id="level2" class="level">
+						</li>
+						<li id="level3" class="level">
+						</li>
+						<li id="level4" class="level">
+						</li>
+						<li id="level5" class="level">
+						</li>
+						<li id="level6" class="level">
+						</li>
+						<li id="level7" class="level">
+						</li>
+						<li id="level8" class="level">
+						</li>
+						<li id="level9" class="level">
+						</li>
+						<li id="level10" class="level">
+						</li>
+						<li id="level11" class="level">
+						</li>
+						<li id="level12" class="level">
+						</li>
+						<li id="level13" class="level">
+						</li>
+						<li id="level14" class="level">
+						</li>
+						<li id="level15" class="level">
+						</li>
+						<li id="level16" class="level">
+						</li>
+						<li id="level17" class="level">
+						</li>
+						<li id="level18" class="level">
+						</li>
+						<li id="level19" class="level">
+						</li>
+						<li id="level20" class="level">
+						</li>
+					</ul>
+				</div>
+			<!--/div-->
+			
+			<div id="chooserRightButton" class="insideChooserButton unselectable">
+				<div id="chooserArrowRight" class="chooserArrow">
+				</div>
+			</div>
+	</div>  
+</body>
+
+</html>

@@ -1,0 +1,659 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * @file
+<span class='line'>  3</span>  * @author Martin Knapovsky &lt;xknapo02@stud.fit.vutbr.cz>
+<span class='line'>  4</span>  * @version 1.0
+<span class='line'>  5</span>  *
+<span class='line'>  6</span>  * @section LICENSE
+<span class='line'>  7</span>  *
+<span class='line'>  8</span>  * Copyright (c) 2012, Martin Knapovsky
+<span class='line'>  9</span>  * All rights reserved.
+<span class='line'> 10</span>  *
+<span class='line'> 11</span>  * Redistribution and use in source and binary forms, with or without
+<span class='line'> 12</span>  * modification, are permitted provided that the following conditions are met:
+<span class='line'> 13</span>  * 1. Redistributions of source code must retain the above copyright
+<span class='line'> 14</span>  *    notice, this list of conditions and the following disclaimer.
+<span class='line'> 15</span>  * 2. Redistributions in binary form must reproduce the above copyright
+<span class='line'> 16</span>  *    notice, this list of conditions and the following disclaimer in the
+<span class='line'> 17</span>  *    documentation and/or other materials provided with the distribution.
+<span class='line'> 18</span>  * 3. All advertising materials mentioning features or use of this software
+<span class='line'> 19</span>  *    must display the following acknowledgement:
+<span class='line'> 20</span>  *    This product includes software developed by the Martin Knapovsky.
+<span class='line'> 21</span>  * 4. Neither the name of the Martin Knapovsky nor the
+<span class='line'> 22</span>  *    names of its contributors may be used to endorse or promote products
+<span class='line'> 23</span>  *    derived from this software without specific prior written permission.
+<span class='line'> 24</span>  *
+<span class='line'> 25</span>  * THIS SOFTWARE IS PROVIDED BY MARTIN KNAPOVSKY ''AS IS'' AND ANY
+<span class='line'> 26</span>  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+<span class='line'> 27</span>  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+<span class='line'> 28</span>  * DISCLAIMED. IN NO EVENT SHALL MARTIN KNAPOVSKY BE LIABLE FOR ANY
+<span class='line'> 29</span>  * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+<span class='line'> 30</span>  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+<span class='line'> 31</span>  * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+<span class='line'> 32</span>  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<span class='line'> 33</span>  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+<span class='line'> 34</span>  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<span class='line'> 35</span>  *
+<span class='line'> 36</span>  * @section DESCRIPTION
+<span class='line'> 37</span>  *
+<span class='line'> 38</span>  * This file contains all global variables used in the game.
+<span class='line'> 39</span>  *
+<span class='line'> 40</span>  */</span><span class="WHIT">
+<span class='line'> 41</span> 
+<span class='line'> 42</span> 
+<span class='line'> 43</span> </span><span class="COMM">/*  
+<span class='line'> 44</span>     ---------------------------
+<span class='line'> 45</span>          Global Variables
+<span class='line'> 46</span>     ---------------------------
+<span class='line'> 47</span> */</span><span class="WHIT">
+<span class='line'> 48</span> 
+<span class='line'> 49</span> </span><span class="COMM">/**
+<span class='line'> 50</span> * Additional informations in console
+<span class='line'> 51</span> */</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">log</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 53</span> 
+<span class='line'> 54</span> </span><span class="COMM">/**
+<span class='line'> 55</span> * Main WebGL Object
+<span class='line'> 56</span> */</span><span class="WHIT">
+<span class='line'> 57</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">gl</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 58</span> </span><span class="COMM">/**
+<span class='line'> 59</span> * Compiled shader program
+<span class='line'> 60</span> */</span><span class="WHIT">
+<span class='line'> 61</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">shaderProgram</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 62</span> </span><span class="COMM">/**
+<span class='line'> 63</span> * Array of dynamic GeometryContainer
+<span class='line'> 64</span> * objects
+<span class='line'> 65</span> */</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dynamicObjects</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="COMM">/**
+<span class='line'> 68</span> * Array of static GeometryContainer
+<span class='line'> 69</span> * objects
+<span class='line'> 70</span> */</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">staticObjects</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="COMM">/**
+<span class='line'> 73</span> * Logic representation of game field
+<span class='line'> 74</span> */</span><span class="WHIT">
+<span class='line'> 75</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">logic</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 76</span> </span><span class="COMM">/**
+<span class='line'> 77</span> * Lights in the scene
+<span class='line'> 78</span> */</span><span class="WHIT">
+<span class='line'> 79</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lights</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 80</span> </span><span class="COMM">/**
+<span class='line'> 81</span> * Lightmaps in the scene
+<span class='line'> 82</span> */</span><span class="WHIT">
+<span class='line'> 83</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lightmaps</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="COMM">/**
+<span class='line'> 85</span> * Game materials
+<span class='line'> 86</span> */</span><span class="WHIT">
+<span class='line'> 87</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">materials</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="COMM">/**
+<span class='line'> 89</span> * Model-View Matrix
+<span class='line'> 90</span> */</span><span class="WHIT">
+<span class='line'> 91</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mvMatrix</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">mat4.create</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="COMM">/**
+<span class='line'> 93</span> * Model-View Matrix stack
+<span class='line'> 94</span> */</span><span class="WHIT">
+<span class='line'> 95</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mvMatrixStack</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 96</span> </span><span class="COMM">/**
+<span class='line'> 97</span> * Projection Matrix
+<span class='line'> 98</span> */</span><span class="WHIT">
+<span class='line'> 99</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pMatrix</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">mat4.create</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>100</span> 
+<span class='line'>101</span> </span><span class="COMM">/** ----- PATHS AND FILETYPES ----- **/</span><span class="WHIT">
+<span class='line'>102</span> 
+<span class='line'>103</span> </span><span class="COMM">/**
+<span class='line'>104</span> * Lightmap path on the server
+<span class='line'>105</span> */</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lightmapPath</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"./lightmaps/"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>107</span> </span><span class="COMM">/**
+<span class='line'>108</span> * Lightmap file type
+<span class='line'>109</span> */</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lightmapFileType</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">".bmp"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="COMM">/**
+<span class='line'>112</span> * Level path on the server
+<span class='line'>113</span> */</span><span class="WHIT">
+<span class='line'>114</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">levelPath</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"./levels/"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>115</span> </span><span class="COMM">/**
+<span class='line'>116</span> * Game representation export file type
+<span class='line'>117</span> */</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">levelFileType</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">".json"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>119</span> </span><span class="COMM">/**
+<span class='line'>120</span> * Actually selected level
+<span class='line'>121</span> */</span><span class="WHIT">
+<span class='line'>122</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">selectedLevel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"level210"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>123</span> </span><span class="COMM">/**
+<span class='line'>124</span> * Audio path
+<span class='line'>125</span> */</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">audioPath</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"./audio/"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="COMM">/**
+<span class='line'>128</span> * Used audio files
+<span class='line'>129</span> */</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">audioFiles</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">  </span><span class="STRN">"Break"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>131</span> </span><span class="WHIT">					</span><span class="STRN">"comix1"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="WHIT">					</span><span class="STRN">"comix2"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>133</span> </span><span class="WHIT">					</span><span class="STRN">"comix3"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="WHIT">					</span><span class="STRN">"comix4"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="WHIT">					</span><span class="STRN">"comix5"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="WHIT">					</span><span class="STRN">"comix6"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">					</span><span class="STRN">"comix7"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="WHIT">					</span><span class="STRN">"comix8"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="WHIT">					</span><span class="STRN">"comix9"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>140</span> </span><span class="WHIT">					</span><span class="STRN">"comix10"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>141</span> </span><span class="WHIT">					</span><span class="STRN">"Cool12"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>142</span> </span><span class="WHIT">					</span><span class="STRN">"Emotion"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="WHIT">					</span><span class="STRN">"Freemind"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>144</span> </span><span class="WHIT">					</span><span class="STRN">"Piano"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>145</span> </span><span class="WHIT">					</span><span class="STRN">"Piano1"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="WHIT">					</span><span class="STRN">"Relax3"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="WHIT">					</span><span class="STRN">"Relax4"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="WHIT">					</span><span class="STRN">"Relax5"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="WHIT">					</span><span class="STRN">"Relax6"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>150</span> </span><span class="WHIT">					</span><span class="STRN">"Relax7"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="WHIT">					</span><span class="STRN">"Space"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="WHIT">					</span><span class="STRN">"Trip12"</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="WHIT">							</span><span class="PUNC">]</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="COMM">/**
+<span class='line'>155</span> * Audio filetype
+<span class='line'>156</span> */</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">audioFileType</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">".ogg"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>158</span> 
+<span class='line'>159</span> </span><span class="COMM">/** ----- END OF PATHS AND FILETYPES -----  **/</span><span class="WHIT">
+<span class='line'>160</span> 
+<span class='line'>161</span> </span><span class="COMM">/** ----- RENDERING SETTINGS ----- **/</span><span class="WHIT">
+<span class='line'>162</span> 
+<span class='line'>163</span> </span><span class="COMM">/**
+<span class='line'>164</span> * Sets rendering of the game field - true
+<span class='line'>165</span> * or rendering of the whole scene - false
+<span class='line'>166</span> * mapped to key 'n'
+<span class='line'>167</span> */</span><span class="WHIT">
+<span class='line'>168</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">drawOnlyGameField</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>169</span> </span><span class="COMM">/**
+<span class='line'>170</span> * This enables or disables drawing
+<span class='line'>171</span> */</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">draw</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="COMM">/**
+<span class='line'>174</span> * Sets usage of opacity
+<span class='line'>175</span> * mapped to key 'o'
+<span class='line'>176</span> */</span><span class="WHIT">
+<span class='line'>177</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">useOpacity</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="COMM">/**
+<span class='line'>179</span> * Sets amout of color addition 
+<span class='line'>180</span> * when opacity enabled
+<span class='line'>181</span> */</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">opacityLevel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0.5</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>183</span> </span><span class="COMM">/**
+<span class='line'>184</span> * Sets usage of textures
+<span class='line'>185</span> * Mapped to key 't'
+<span class='line'>186</span> */</span><span class="WHIT">
+<span class='line'>187</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">useTextures</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>188</span> </span><span class="COMM">/** 
+<span class='line'>189</span> * Sets usage of lightmaps in the scene
+<span class='line'>190</span> * Lightmaps has not been completely 
+<span class='line'>191</span> * exported yet, so use this only
+<span class='line'>192</span> * when you are completely sure
+<span class='line'>193</span> * what you are doing, because this
+<span class='line'>194</span> * significantly slows rendering
+<span class='line'>195</span> * Mapped to key 'x'
+<span class='line'>196</span> */</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">useLightmaps</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="COMM">/**
+<span class='line'>199</span> * Sets usage of lightning
+<span class='line'>200</span> * Mapped to key 'l'
+<span class='line'>201</span> */</span><span class="WHIT">
+<span class='line'>202</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">useLightning</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="COMM">/**
+<span class='line'>204</span> * Sets usage of specular highlights in the scene
+<span class='line'>205</span> * Works only with useLightning = true
+<span class='line'>206</span> * Mapped to key 's'
+<span class='line'>207</span> */</span><span class="WHIT">
+<span class='line'>208</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">useSpecular</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>209</span> </span><span class="COMM">/**
+<span class='line'>210</span> * Sets WebGL canvas to fullscreen
+<span class='line'>211</span> * This removes all HTML elements (visibility: none)
+<span class='line'>212</span> * and leaves only WebGL canvas and UI over it
+<span class='line'>213</span> * Mapped to key 'f'.
+<span class='line'>214</span> */</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fullscreen</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="COMM">/**
+<span class='line'>217</span> * Sets top camera lock
+<span class='line'>218</span> */</span><span class="WHIT">
+<span class='line'>219</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">useTopCamera</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>220</span> </span><span class="COMM">/**
+<span class='line'>221</span> * This displays user interface
+<span class='line'>222</span> * Mapped to key 'u'
+<span class='line'>223</span> */</span><span class="WHIT">
+<span class='line'>224</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">useUi</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>225</span> </span><span class="COMM">/**
+<span class='line'>226</span> * Actual rendering mode
+<span class='line'>227</span> */</span><span class="WHIT">
+<span class='line'>228</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">renderMode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"triangles"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>229</span> </span><span class="COMM">/**
+<span class='line'>230</span> * Index of actual rendering mode
+<span class='line'>231</span> * This is used for faster access
+<span class='line'>232</span> */</span><span class="WHIT">
+<span class='line'>233</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">renderModeIndex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>234</span> </span><span class="COMM">/**
+<span class='line'>235</span> * This is just a list of all supported
+<span class='line'>236</span> * rendering modes. Those enabled are
+<span class='line'>237</span> * included in renderModes
+<span class='line'>238</span> */</span><span class="WHIT">
+<span class='line'>239</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">allRenderModes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="STRN">"triangles"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"points"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"lineStrip"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"lineLoop"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"lines"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"triangleStrip"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"triangleFan"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"quadStrip"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"quads"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"polygon"</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>240</span> </span><span class="COMM">/**
+<span class='line'>241</span> * Enabled rendering modes
+<span class='line'>242</span> * Change of rendering mode is mapped to key 'm'
+<span class='line'>243</span> */</span><span class="WHIT">
+<span class='line'>244</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">renderModes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="STRN">"triangles"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"points"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"lineStrip"</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>245</span> </span><span class="COMM">/**
+<span class='line'>246</span> * Actual camera mode
+<span class='line'>247</span> * "followCamera" is default
+<span class='line'>248</span> */</span><span class="WHIT">
+<span class='line'>249</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cameraMode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"followCamera"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>250</span> </span><span class="COMM">/**
+<span class='line'>251</span> * Actual index of camera mode
+<span class='line'>252</span> * for faster access
+<span class='line'>253</span> * default value is 3
+<span class='line'>254</span> */</span><span class="WHIT">
+<span class='line'>255</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cameraModeIndex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>256</span> </span><span class="COMM">/**
+<span class='line'>257</span> * List of camera modes
+<span class='line'>258</span> * Change of camera mode is mapped to key 'c'
+<span class='line'>259</span> */</span><span class="WHIT">
+<span class='line'>260</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cameraModes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="STRN">"centerCamera"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"fpsCamera"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"followCamera"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"behindCamera"</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>261</span> </span><span class="COMM">/**
+<span class='line'>262</span> * ID of timeout used whed selecting bug
+<span class='line'>263</span> */</span><span class="WHIT">
+<span class='line'>264</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">paintSelectedBugRedTimeoutID</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>265</span> </span><span class="COMM">/**
+<span class='line'>266</span> * Nastavi vykreslovani vybrane berusky 
+<span class='line'>267</span> * cervenou barvou - interval vykreslovani
+<span class='line'>268</span> * se nastavi pomoci resetSelectionPainterTime
+<span class='line'>269</span> */</span><span class="WHIT">
+<span class='line'>270</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">paintSelectedBugRed</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>271</span> </span><span class="COMM">/**
+<span class='line'>272</span> * Sets timeout delay for bug being 
+<span class='line'>273</span> * drawn red when selected.
+<span class='line'>274</span> * Enabled by paintSelectedBugRed
+<span class='line'>275</span> */</span><span class="WHIT">
+<span class='line'>276</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">resetSelectionPainterTime</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>277</span> </span><span class="COMM">/**
+<span class='line'>278</span> * Sets drawing of weight reacting
+<span class='line'>279</span> * floor to higher position
+<span class='line'>280</span> */</span><span class="WHIT">
+<span class='line'>281</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">propadloUp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>282</span> </span><span class="COMM">/**
+<span class='line'>283</span> * This variable enables envelope
+<span class='line'>284</span> * drawing for dynamic objects
+<span class='line'>285</span> */</span><span class="WHIT">
+<span class='line'>286</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">drawEnvelopes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>287</span> </span><span class="COMM">/**
+<span class='line'>288</span> * This is used for drawing of 
+<span class='line'>289</span> * additional floor when there is
+<span class='line'>290</span> * only game field displayed
+<span class='line'>291</span> */</span><span class="WHIT">
+<span class='line'>292</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">drawFloor</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>293</span> </span><span class="COMM">/**
+<span class='line'>294</span> * Sets frustrum clipping
+<span class='line'>295</span> */</span><span class="WHIT">
+<span class='line'>296</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">useClipping</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>297</span> </span><span class="COMM">/**
+<span class='line'>298</span> * When clipping is enabled 
+<span class='line'>299</span> * this variable sets normalization
+<span class='line'>300</span> * of frustrum
+<span class='line'>301</span> */</span><span class="WHIT">
+<span class='line'>302</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">normalizeFrustum</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>303</span> </span><span class="COMM">/**
+<span class='line'>304</span> * Clipped object counter
+<span class='line'>305</span> */</span><span class="WHIT">
+<span class='line'>306</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">clippedObjects</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>307</span> </span><span class="COMM">/**
+<span class='line'>308</span> * This specifies the amout 
+<span class='line'>309</span> * of objects being clipped
+<span class='line'>310</span> */</span><span class="WHIT">
+<span class='line'>311</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">clippingThreshold</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>312</span> </span><span class="COMM">/**
+<span class='line'>313</span> * Sets keyboard and event notifications
+<span class='line'>314</span> */</span><span class="WHIT">
+<span class='line'>315</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">useNotifications</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>316</span> 
+<span class='line'>317</span> 
+<span class='line'>318</span> </span><span class="COMM">/** ----- END OF RENDERING SETTINGS ----- **/</span><span class="WHIT">
+<span class='line'>319</span> 
+<span class='line'>320</span> </span><span class="COMM">/** ----- OTHER GLOBAL VARIABLES ----- **/</span><span class="WHIT">
+<span class='line'>321</span> 
+<span class='line'>322</span> </span><span class="COMM">/**
+<span class='line'>323</span> * Indication of WebGL object being initialized
+<span class='line'>324</span> * used for faster access
+<span class='line'>325</span> */</span><span class="WHIT">
+<span class='line'>326</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">glInitialized</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>327</span> </span><span class="COMM">/**
+<span class='line'>328</span> * This variable is used for switching
+<span class='line'>329</span> * between old type of export and new one
+<span class='line'>330</span> * All game files are now converted into
+<span class='line'>331</span> * new format, so true is default
+<span class='line'>332</span> */</span><span class="WHIT">
+<span class='line'>333</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">newFlag</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>334</span> </span><span class="COMM">/**
+<span class='line'>335</span> * This enables loading of the game 
+<span class='line'>336</span> * when onload event evoked
+<span class='line'>337</span> * Otherwise loading of level is evoked
+<span class='line'>338</span> * by users keypress on level item in menu
+<span class='line'>339</span> */</span><span class="WHIT">
+<span class='line'>340</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">runWhenLoaded</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>341</span> </span><span class="COMM">/**
+<span class='line'>342</span> * When loading level, progress is displayed.
+<span class='line'>343</span> * This value sets the value ofloaded JSON file.
+<span class='line'>344</span> */</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>345</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">loadedJSONValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">30</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>346</span> </span><span class="COMM">/**
+<span class='line'>347</span> * When level is loaded, then this variable is set to true
+<span class='line'>348</span> */</span><span class="WHIT">
+<span class='line'>349</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">loaded</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>350</span> </span><span class="COMM">/**
+<span class='line'>351</span> * This variable is important
+<span class='line'>352</span> * for various levels with gamefield
+<span class='line'>353</span> * located very low
+<span class='line'>354</span> */</span><span class="WHIT">
+<span class='line'>355</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">moveAlongYAxis</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>356</span> </span><span class="COMM">/** 
+<span class='line'>357</span> * Counter of static object drawn
+<span class='line'>358</span> * in one second
+<span class='line'>359</span> */</span><span class="WHIT">
+<span class='line'>360</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">staticCounter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>361</span> </span><span class="COMM">/**
+<span class='line'>362</span> * Counter of dynamic objects drawn 
+<span class='line'>363</span> * in one second
+<span class='line'>364</span> */</span><span class="WHIT">
+<span class='line'>365</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dynamicCounter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>366</span> </span><span class="COMM">/**
+<span class='line'>367</span> * Sum of all loaded textures
+<span class='line'>368</span> */</span><span class="WHIT">
+<span class='line'>369</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">textureCount</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>370</span> </span><span class="COMM">/**
+<span class='line'>371</span> * How many textures have already been loaded
+<span class='line'>372</span> */</span><span class="WHIT">
+<span class='line'>373</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">loadedTextureCount</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>374</span> </span><span class="COMM">/**
+<span class='line'>375</span> * Current frames drawn
+<span class='line'>376</span> * This is being reitialized every second
+<span class='line'>377</span> */</span><span class="WHIT">
+<span class='line'>378</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fps</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>379</span> </span><span class="COMM">/**
+<span class='line'>380</span> * Sets displaying of FPS into console
+<span class='line'>381</span> */</span><span class="WHIT">
+<span class='line'>382</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">showFPSinConsole</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>383</span> </span><span class="COMM">/**
+<span class='line'>384</span> * ID of fps Timeout
+<span class='line'>385</span> */</span><span class="WHIT">
+<span class='line'>386</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fpsTimeoutID</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>387</span> </span><span class="COMM">/**
+<span class='line'>388</span> * Actually pressed keys
+<span class='line'>389</span> */</span><span class="WHIT">
+<span class='line'>390</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">currentlyPressedKeys</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>391</span> </span><span class="COMM">/**
+<span class='line'>392</span> * Receive events from user
+<span class='line'>393</span> */</span><span class="WHIT">
+<span class='line'>394</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">receiveKeyEvents</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>395</span> </span><span class="COMM">/**
+<span class='line'>396</span> * When level loaded, here is the whole level
+<span class='line'>397</span> * saved so it can be easily reloaded
+<span class='line'>398</span> */</span><span class="WHIT">
+<span class='line'>399</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">logicBackup</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>400</span> </span><span class="COMM">/**
+<span class='line'>401</span> * How fast to elevate camera
+<span class='line'>402</span> */</span><span class="WHIT">
+<span class='line'>403</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pitchRate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>404</span> </span><span class="COMM">/**
+<span class='line'>405</span> * How fast to rotace camera
+<span class='line'>406</span> */</span><span class="WHIT">
+<span class='line'>407</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">yawRate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>408</span> </span><span class="COMM">/**
+<span class='line'>409</span> * Adjustment for X Axis translation
+<span class='line'>410</span> */</span><span class="WHIT">
+<span class='line'>411</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">xAdjust</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>412</span> </span><span class="COMM">/**
+<span class='line'>413</span> * Adjustment for Y Axis translation
+<span class='line'>414</span> */</span><span class="WHIT">
+<span class='line'>415</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">yAdjust</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>416</span> </span><span class="COMM">/**
+<span class='line'>417</span> * Adjustment for Z Axis translation
+<span class='line'>418</span> */</span><span class="WHIT">
+<span class='line'>419</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">zAdjust</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>420</span> </span><span class="COMM">/**
+<span class='line'>421</span> * Indication of pressed mouse button
+<span class='line'>422</span> */</span><span class="WHIT">
+<span class='line'>423</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mouseDown</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>424</span> </span><span class="COMM">/**
+<span class='line'>425</span> * Mouse last position - axis X
+<span class='line'>426</span> */</span><span class="WHIT">
+<span class='line'>427</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lastMouseX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>428</span> </span><span class="COMM">/**
+<span class='line'>429</span> * Mouse last position - axis Y
+<span class='line'>430</span> */</span><span class="WHIT">
+<span class='line'>431</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lastMouseY</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>432</span> </span><span class="COMM">/**
+<span class='line'>433</span> * Actual camera rotation
+<span class='line'>434</span> */</span><span class="WHIT">
+<span class='line'>435</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">currentRotation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>436</span> </span><span class="COMM">/**
+<span class='line'>437</span> * Actual camera eleveation
+<span class='line'>438</span> */</span><span class="WHIT">
+<span class='line'>439</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">currentElevation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">45</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>440</span> </span><span class="COMM">/**
+<span class='line'>441</span> * Width of canvas element
+<span class='line'>442</span> * Used for mouse move events
+<span class='line'>443</span> */</span><span class="WHIT">
+<span class='line'>444</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">canvasWidth</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>445</span> </span><span class="COMM">/**
+<span class='line'>446</span> * Height of canvas element
+<span class='line'>447</span> * Used for mouse move events
+<span class='line'>448</span> */</span><span class="WHIT">
+<span class='line'>449</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">canvasHeight</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>450</span> </span><span class="COMM">/**
+<span class='line'>451</span> * Actual pointer position in axis X
+<span class='line'>452</span> */</span><span class="WHIT">
+<span class='line'>453</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">currentPointerX</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>454</span> </span><span class="COMM">/**
+<span class='line'>455</span> * Actual pointer position in axis Y
+<span class='line'>456</span> */</span><span class="WHIT">
+<span class='line'>457</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">currentPointerY</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>458</span> </span><span class="COMM">/**
+<span class='line'>459</span> * Rotation speed step
+<span class='line'>460</span> */</span><span class="WHIT">
+<span class='line'>461</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rotationSpeed</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>462</span> </span><span class="COMM">/**
+<span class='line'>463</span> * Slow rotation speed
+<span class='line'>464</span> */</span><span class="WHIT">
+<span class='line'>465</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">singleSpeedRotation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>466</span> </span><span class="COMM">/**
+<span class='line'>467</span> * Fast rotation speed
+<span class='line'>468</span> */</span><span class="WHIT">
+<span class='line'>469</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">doubleSpeedRotation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">20</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>470</span> </span><span class="COMM">/**
+<span class='line'>471</span> * Double speed multiplier
+<span class='line'>472</span> */</span><span class="WHIT">
+<span class='line'>473</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">doubleSpeedMultiplier</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>474</span> </span><span class="COMM">/**
+<span class='line'>475</span> * Low elevation limit
+<span class='line'>476</span> */</span><span class="WHIT">
+<span class='line'>477</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lowElevationLimiter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">15</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>478</span> </span><span class="COMM">/**
+<span class='line'>479</span> * High elevation limit
+<span class='line'>480</span> */</span><span class="WHIT">
+<span class='line'>481</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">highElevationLimiter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">90</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>482</span> </span><span class="COMM">/**
+<span class='line'>483</span> * Actual distance from scene
+<span class='line'>484</span> */</span><span class="WHIT">
+<span class='line'>485</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">distanceFromScene</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">35</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>486</span> </span><span class="COMM">/**
+<span class='line'>487</span> * Distance speed multiplier
+<span class='line'>488</span> */</span><span class="WHIT">
+<span class='line'>489</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cameraDistanceMultiplier</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>490</span> </span><span class="COMM">/**
+<span class='line'>491</span> * Max camera distance
+<span class='line'>492</span> */</span><span class="WHIT">
+<span class='line'>493</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">maxCameraDistance</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">45</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>494</span> </span><span class="COMM">/**
+<span class='line'>495</span> * Min camera distance
+<span class='line'>496</span> */</span><span class="WHIT">
+<span class='line'>497</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">minCameraDistance</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>498</span> </span><span class="COMM">/**
+<span class='line'>499</span> * Timer enabler
+<span class='line'>500</span> */</span><span class="WHIT">
+<span class='line'>501</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">showTime</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>502</span> </span><span class="COMM">/**
+<span class='line'>503</span> * Actual time from timeout start
+<span class='line'>504</span> */</span><span class="WHIT">
+<span class='line'>505</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">timeCounter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>506</span> </span><span class="COMM">/**
+<span class='line'>507</span> * Time counter timeout ID
+<span class='line'>508</span> */</span><span class="WHIT">
+<span class='line'>509</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">timeID</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>510</span> </span><span class="COMM">/**
+<span class='line'>511</span> * Draw only bugs
+<span class='line'>512</span> */</span><span class="WHIT">
+<span class='line'>513</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">drawJustBug</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>514</span> </span><span class="COMM">/**
+<span class='line'>515</span> * Not used yet
+<span class='line'>516</span> */</span><span class="WHIT">
+<span class='line'>517</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">useCameraReset</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>518</span> </span><span class="COMM">/**
+<span class='line'>519</span> * Whether to use projection
+<span class='line'>520</span> * buttons or not
+<span class='line'>521</span> */</span><span class="WHIT">
+<span class='line'>522</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">useProjection</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>523</span> </span><span class="COMM">/**
+<span class='line'>524</span> * Default projection angle
+<span class='line'>525</span> */</span><span class="WHIT">
+<span class='line'>526</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">projectionAngleDefault</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">45</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>527</span> </span><span class="COMM">/**
+<span class='line'>528</span> * Actual projection angle
+<span class='line'>529</span> */</span><span class="WHIT">
+<span class='line'>530</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">projectionAngle</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">projectionAngleDefault</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>531</span> </span><span class="COMM">/**
+<span class='line'>532</span> * Step for projection angle adjustment
+<span class='line'>533</span> */</span><span class="WHIT">
+<span class='line'>534</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">projectionStep</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">5</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>535</span> 
+<span class='line'>536</span> </span><span class="COMM">/** ----- WEB GLOBAL VARIABLES ----- **/</span><span class="WHIT">
+<span class='line'>537</span> 
+<span class='line'>538</span> </span><span class="COMM">/**
+<span class='line'>539</span> * Canvas width for web functions
+<span class='line'>540</span> */</span><span class="WHIT">
+<span class='line'>541</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">windowWidth</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">896</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>542</span> </span><span class="COMM">/**
+<span class='line'>543</span> * Menu items
+<span class='line'>544</span> */</span><span class="WHIT">
+<span class='line'>545</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">menu</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="STRN">'#info'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'#howto'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'#controls'</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>546</span> </span><span class="COMM">/**
+<span class='line'>547</span> * Actually selected menu item
+<span class='line'>548</span> */</span><span class="WHIT">
+<span class='line'>549</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">selectedScreen</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"welcome"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>550</span> </span><span class="COMM">/**
+<span class='line'>551</span> * First level in selector
+<span class='line'>552</span> */</span><span class="WHIT">
+<span class='line'>553</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">leftLevel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>554</span> </span><span class="COMM">/**
+<span class='line'>555</span> * Is level selector opened?
+<span class='line'>556</span> * FALSE = Closed, TRUE = Opened 
+<span class='line'>557</span> */</span><span class="WHIT">
+<span class='line'>558</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">chooserOpened</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>559</span> </span><span class="COMM">/**
+<span class='line'>560</span> * Several animation speed
+<span class='line'>561</span> */</span><span class="WHIT">
+<span class='line'>562</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">speed</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>563</span> </span><span class="COMM">/**
+<span class='line'>564</span> * How much to shift level div
+<span class='line'>565</span> */</span><span class="WHIT">
+<span class='line'>566</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">levelShift</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">170</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>567</span> </span><span class="COMM">/**
+<span class='line'>568</span> * How many levels shown in selector
+<span class='line'>569</span> * at time
+<span class='line'>570</span> */</span><span class="WHIT">
+<span class='line'>571</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">shownLevels</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">4</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>572</span> </span><span class="COMM">/**
+<span class='line'>573</span> * How many levels shown in selector
+<span class='line'>574</span> * summary
+<span class='line'>575</span> */</span><span class="WHIT">
+<span class='line'>576</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">levelCounter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">20</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>577</span> </span><span class="COMM">/**
+<span class='line'>578</span> * Double click indicator
+<span class='line'>579</span> */</span><span class="WHIT">
+<span class='line'>580</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">click</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>581</span> </span><span class="COMM">/**
+<span class='line'>582</span> * Do not ask me :D
+<span class='line'>583</span> */</span><span class="WHIT">
+<span class='line'>584</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hack</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">2710</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>585</span> </span><span class="COMM">/**
+<span class='line'>586</span> * Rotate levels or not?
+<span class='line'>587</span> */</span><span class="WHIT">
+<span class='line'>588</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rotateLevelBool</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>589</span> </span><span class="COMM">/**
+<span class='line'>590</span> * Chooser animated
+<span class='line'>591</span> */</span><span class="WHIT">
+<span class='line'>592</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">chooserMoving</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>593</span> </span><span class="COMM">/**
+<span class='line'>594</span> * Move arrows under pointer
+<span class='line'>595</span> */</span><span class="WHIT">
+<span class='line'>596</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">moveArrow</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>597</span> </span><span class="COMM">/**
+<span class='line'>598</span> * Current screen of howto context
+<span class='line'>599</span> */</span><span class="WHIT">
+<span class='line'>600</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">currentHowtoScreen</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>601</span> </span><span class="COMM">/**
+<span class='line'>602</span> * Current screen of controls context
+<span class='line'>603</span> */</span><span class="WHIT">
+<span class='line'>604</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">currentControlsScreen</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>605</span> </span><span class="COMM">/**
+<span class='line'>606</span> * How many control screens there are
+<span class='line'>607</span> */</span><span class="WHIT">
+<span class='line'>608</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">controlsScreenCount</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>609</span> </span><span class="COMM">/**
+<span class='line'>610</span> * How many howto screens there are
+<span class='line'>611</span> */</span><span class="WHIT">
+<span class='line'>612</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">howtoScreenCount</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>613</span> </span><span class="COMM">/**
+<span class='line'>614</span> * This function is used for 
+<span class='line'>615</span> * level with diffent represention
+<span class='line'>616</span> * loaded
+<span class='line'>617</span> */</span><span class="WHIT">
+<span class='line'>618</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">corrections</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>619</span> 
+<span class='line'>620</span> </span><span class="COMM">/* --- AUDIO SECTION --- */</span><span class="WHIT">
+<span class='line'>621</span> </span><span class="COMM">/**
+<span class='line'>622</span> * Audio player div name
+<span class='line'>623</span> */</span><span class="WHIT">
+<span class='line'>624</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">audioDiv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"#audioPlayer"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>625</span> </span><span class="COMM">/**
+<span class='line'>626</span> * Audio player API div name
+<span class='line'>627</span> */</span><span class="WHIT">
+<span class='line'>628</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">audioAPIDiv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"#audioPlayerAPI"</span><span class="WHIT">
+<span class='line'>629</span> </span><span class="COMM">/**
+<span class='line'>630</span> * Audio player buttons div name
+<span class='line'>631</span> */</span><span class="WHIT">
+<span class='line'>632</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">audioButtonsDiv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"#audioPlayerButtons"</span><span class="WHIT">
+<span class='line'>633</span> </span><span class="COMM">/**
+<span class='line'>634</span> * Currently loaded song
+<span class='line'>635</span> */</span><span class="WHIT">
+<span class='line'>636</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">audioPlayingIndex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>637</span> </span><span class="COMM">/**
+<span class='line'>638</span> * Audio previous button div name
+<span class='line'>639</span> */</span><span class="WHIT">
+<span class='line'>640</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">audioPrewDiv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"#prev"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>641</span> </span><span class="COMM">/**
+<span class='line'>642</span> * Audio play button div name
+<span class='line'>643</span> */</span><span class="WHIT">
+<span class='line'>644</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">audioPlayPauseDiv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"#playPause"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>645</span> </span><span class="COMM">/**
+<span class='line'>646</span> * Audio next button div name
+<span class='line'>647</span> */</span><span class="WHIT">
+<span class='line'>648</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">audioNextDiv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"#next"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>649</span> </span><span class="COMM">/**
+<span class='line'>650</span> * Is audio currently playing?
+<span class='line'>651</span> */</span><span class="WHIT">
+<span class='line'>652</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">audioPlaying</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span></pre></body></html>
