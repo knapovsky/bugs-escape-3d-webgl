@@ -1,50 +1,34 @@
-﻿Toto DVD je součástí technické zprávy bakalářské práce 
+﻿# Bugs Escape 3D WebGL
+Implementation of a 3D logical game in JavaScript and WebGL
 
-IMPLEMENTACE 3D LOGICKÉ HRY V JAVASCRIPTU
+## Directory structure:
 
-Adresářová struktura:
+- ./audio ............Game music
+- ./css ..............Stylesheets
+- ./doc ..............Documentation source code
+- ./dochtml ..........Documentation in HTML
+- ./graphics .........Graphics sources
+- ./img ..............Graphics for web
+- ./js ...............Game implementation
+- ./levels ...........Game levels
+- ./lightmaps ........Lightmaps
+- ./textures .........Textures
+- ./favicon.ico ......Web Icon
+- ./ibp.pdf ..........Theses
+- ./index.html .......Game index with GLSL shader description
 
-./audio ............Herní hudba
-./css ..............Kaskádové styly
-./doc ..............Zdrojové soubory techniké zprávy
-./dochtml ..........Vygenerovaná dokumentace hry
-./graphics .........Zdrojové soubory grafiky
-./img ..............Grafika použitá na webu
-./js ...............Implementace hry a pomocné soubory
-./levels ...........Herní úrovně
-./lightmaps ........Lightmapy
-./textures .........Textury
-./favicon.ico ......Ikona webu
-./ibp.pdf ..........Technická zpráva
-./index.html .......HTML dokument hry s GLSL popisem shaderů
+## Warning
 
-Upozornění:
-
-Některé prohlížeče zamezují možnosti načítání souborů z lokálního úložiště. 
-U prohlížeče Google Chrome je při jeho spouštění potřeba přidat tyto parametry:
-
+Some browsers block loading from local storage. You can enable it in Google Chrome by adding these parameters for launching the browser:
+```
 --allow-file-access-from-files --disable-web-security
+```
 
-Hardwarová akcelerace WebGL je možná pouze na grafických čipech podporujících
-shader model 2.0. V případě, že Váš hardware tuto technologie nepodporuje,
-je ve většině případů možné vykreslovat obraz softwarově. Dále je také nutné
-zkontrolovat, zda Váš prohlížeč podporuje WebGL a zda je technologie
-v prohlížeči povolena.
+WebGL hardware acceleration is possible on on GPUs supporting shader model 2.0. If your hardware doesn't support this technology, it's usually possible to use software rendering. It's also necessary to check if your browser supports WebGL and if this technology is enabled in the browser.
 
-Pokud se ocitnete v situaci, kdy je hra podle všeho vykreslována,
-avšak obrazovka zůstává černá, pak máte nejspíše zvolenou kameru 
-z pohledu berušky a vypnuto zobrazení okolí herní úrovně. Informace
-o klávesách, které kameru a zobrazení nastavují, jsou dostupné 
-pomocí menu v pravém horním rohu webu. Menu představuje různé
-kontexty zobrazení. Zleva jsou to:
+In a situation when it seems like the game should be working, but the screen is still black, you might have chosen a first person view and you've disabled rendering of the game levell. Information about the usable keys are available in the right bottom corner. 
 
-* Hra
-* Informace o projektu
-* Informace o hře
-* Ovládání
-
-
-Martin Knapovský (xknapo02@stud.fit.vutbr.cz, knapovsky@email.cz)
+Martin Knapovský (martin@knapovsky.com)
 Brno 2012
 
 
