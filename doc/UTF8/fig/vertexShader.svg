@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1686"
+   width="737.66534"
+   height="410.66666"
+   viewBox="0 0 737.66534 410.66666"
+   sodipodi:docname="vertexShader.pdf"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1690">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1704">
+      <path
+         d="M 0,308 H 553.249 V 0 H 0 Z"
+         id="path1702" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1732">
+      <path
+         d="M 0,308 H 553.249 V 0 H 0 Z"
+         id="path1730" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1760">
+      <path
+         d="M 0,308 H 553.249 V 0 H 0 Z"
+         id="path1758" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="namedview1688"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false" />
+  <g
+     id="g1694"
+     inkscape:groupmode="layer"
+     inkscape:label="Page 1"
+     transform="matrix(1.3333333,0,0,-1.3333333,0,410.66667)">
+    <path
+       d="m 357.5,130.5 h -165 v 91 h 165 z"
+       style="fill:#e6e6e6;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       id="path1696" />
+    <g
+       id="g1698">
+      <g
+         id="g1700"
+         clip-path="url(#clipPath1704)">
+        <g
+           id="g1706"
+           transform="translate(336.2529,251.5)">
+          <path
+             d="m 0,0 h -143.944 l 21.272,56 H 21.271 Z"
+             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             id="path1708" />
+        </g>
+        <g
+           id="g1710"
+           transform="translate(531.2529,151.5)">
+          <path
+             d="m 0,0 h -143.944 l 21.271,56 H 21.271 Z"
+             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             id="path1712" />
+        </g>
+        <g
+           id="g1714"
+           transform="translate(422.2529,0.5)">
+          <path
+             d="m 0,0 h -143.944 l 21.271,80 H 21.271 Z"
+             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             id="path1716" />
+        </g>
+        <g
+           id="g1718"
+           transform="translate(256.2529,0.5)">
+          <path
+             d="m 0,0 h -143.944 l 21.271,80 H 21.271 Z"
+             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             id="path1720" />
+        </g>
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,236.0679,172.5918)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text1724"><tspan
+         x="0 8.5539999 14.77 19.431999 23.323999 29.540001 36.540001 40.040001 47.824001 54.824001 61.040001 68.040001 74.255997"
+         y="0"
+         sodipodi:role="line"
+         id="tspan1722">Vertex Shader</tspan></text>
+    <g
+       id="g1726">
+      <g
+         id="g1728"
+         clip-path="url(#clipPath1732)">
+        <g
+           id="g1734"
+           transform="translate(162.5,150.5)">
+          <path
+             d="M 0,0 C 0,0 -22.167,-12.5 -52.5,0 -77,11.5 -105,0 -105,0 V 58 H 0 Z"
+             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             id="path1736" />
+        </g>
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,72.6982,187.5)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text1742"><tspan
+         x="0 8.5539999 15.554 20.216 27.216 31.108 38.108002 45.108002 52.108002 55.608002 62.608002 69.608002"
+         y="0"
+         sodipodi:role="line"
+         id="tspan1738">Zdrojový kód</tspan><tspan
+         x="-2.7019999 4.2979999 10.514 15.176 19.068001 25.284 32.284 35.784 41.23 48.23 54.445999 61.445999 67.662003 72.323997"
+         y="16.799999"
+         sodipodi:role="line"
+         id="tspan1740">vertex shaderu</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,210.8922,283.498)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text1752"><tspan
+         x="0 10.108 16.323999 20.216 27.216 33.431999 37.324001 43.540001 47.431999 53.647999 64.540001 68.040001 75.040001 81.255997 85.917999 89.809998 96.809998 103.81 110.81 117.026 124.026"
+         y="0"
+         sodipodi:role="line"
+         id="tspan1744">Uživatelem definované</tspan><tspan
+         x="9.1280003 16.128 20.790001 27.790001 38.681999 44.897999 51.897999 58.897999 65.113998 68.613998 74.059998 77.559998 83.776001 87.667999 92.330002 96.222 103.222 110.222 114.114"
+         y="16.799999"
+         sodipodi:role="line"
+         id="tspan1746">proměnné s atributy</tspan><tspan
+         x="196 206.108 212.32401 216.216 223.216 229.43201 233.32401 239.53999 243.43201 249.64799 260.54001 264.04001 271.04001 277.25601 281.918 285.81 292.81 299.81 306.81 313.026 320.026"
+         y="98"
+         sodipodi:role="line"
+         id="tspan1748">Uživatelem definované</tspan><tspan
+         x="208.82401 215.82401 222.82401 226.716 231.37801 238.37801 243.03999 253.93201 257.43201 264.43201 269.09399 276.09399 286.98599 293.202 300.202 307.202"
+         y="114.8"
+         sodipodi:role="line"
+         id="tspan1750">uniform proměnné</tspan></text>
+    <g
+       id="g1754">
+      <g
+         id="g1756"
+         clip-path="url(#clipPath1760)">
+        <g
+           id="g1762"
+           transform="translate(162,176)">
+          <path
+             d="M 0,0 H 30"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path1764" />
+        </g>
+        <g
+           id="g1766"
+           transform="translate(162,176.5)">
+          <path
+             d="M 0,0 H 24"
+             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             id="path1768" />
+        </g>
+        <g
+           id="g1770"
+           transform="translate(192,176.5)">
+          <path
+             d="M 0,0 C -2.84,-1.054 -6.363,-2.852 -8.547,-4.756 L -6.827,0 -8.547,4.755 C -6.363,2.851 -2.84,1.053 0,0"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path1772" />
+        </g>
+        <g
+           id="g1774"
+           transform="translate(357,175)">
+          <path
+             d="M 0,0 H 40"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path1776" />
+        </g>
+        <g
+           id="g1778"
+           transform="translate(363,175.5)">
+          <path
+             d="M 0,0 H 34"
+             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             id="path1780" />
+        </g>
+        <g
+           id="g1782"
+           transform="translate(357,175.5)">
+          <path
+             d="M 0,0 C 2.84,-1.054 6.363,-2.852 8.547,-4.756 L 6.827,0 8.547,4.755 C 6.363,2.851 2.84,1.053 0,0"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path1784" />
+        </g>
+        <g
+           id="g1786"
+           transform="translate(274.916,221.5)">
+          <path
+             d="M 0,0 0.084,30"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path1788" />
+        </g>
+        <g
+           id="g1790"
+           transform="translate(274.9331,227.5352)">
+          <path
+             d="M 0,0 0.067,23.965"
+             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             id="path1792" />
+        </g>
+        <g
+           id="g1794"
+           transform="translate(274.916,221.5)">
+          <path
+             d="M 0,0 C 1.062,2.837 2.869,6.355 4.78,8.534 L 0.019,6.827 -4.731,8.561 C -2.833,6.371 -1.045,2.843 0,0"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path1796" />
+        </g>
+        <g
+           id="g1798"
+           transform="translate(200.0342,83.6987)">
+          <path
+             d="M 0,0 74.882,46.801"
+             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             id="path1800" />
+        </g>
+        <g
+           id="g1802"
+           transform="translate(194.9165,80.5)">
+          <path
+             d="M 0,0 C 2.967,0.611 6.907,0.955 9.769,0.497 L 5.79,3.618 4.728,8.562 C 3.885,5.79 1.85,2.398 0,0"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path1804" />
+        </g>
+        <g
+           id="g1806"
+           transform="translate(355.6982,83.5332)">
+          <path
+             d="M 0,0 -80.782,46.967"
+             style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             id="path1808" />
+        </g>
+        <g
+           id="g1810"
+           transform="translate(360.916,80.5)">
+          <path
+             d="M 0,0 C -1.926,2.338 -4.067,5.664 -4.999,8.408 L -5.902,3.432 -9.779,0.186 C -6.934,0.734 -2.984,0.517 0,0"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path1812" />
+        </g>
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,136.7739,66.5)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text1818"><tspan
+         x="0 7.7839999 14.784 21 27.216 31.108 37.324001 41.216 48.216 52.108002 55.608002 61.824001 68.040001 75.040001 82.040001 89.040001 96.040001 103.04 109.256 116.256"
+         y="0"
+         sodipodi:role="line"
+         id="tspan1814">Speciální zabudované</tspan><tspan
+         x="33.236 40.236 44.897999 51.897999 62.790001 69.005997 76.005997 83.005997"
+         y="16.799999"
+         sodipodi:role="line"
+         id="tspan1816">proměnné</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,158,36.5)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11px;font-family:Arial;-inkscape-font-specification:ArialMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text1826"><tspan
+         x="0 6.1160002 8.5579996 14.674 22.011 28.127001 33.626999 36.069 39.126999 41.569 47.685001"
+         y="0"
+         sodipodi:role="line"
+         id="tspan1820">gl_Position</tspan><tspan
+         x="0 6.1160002 8.5579996 14.674 21.395 25.058001 31.174 37.290001 40.348 47.069 53.185001 58.685001 61.126999 67.242996"
+         y="13.2"
+         sodipodi:role="line"
+         id="tspan1822">gl_FrontFacing</tspan><tspan
+         x="0 6.1160002 8.5579996 14.674 22.011 28.127001 30.569 36.685001 39.743 47.080002 49.521999 55.021999"
+         y="26.4"
+         sodipodi:role="line"
+         id="tspan1824">gl_PointSize</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,296.8911,45)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text1832"><tspan
+         x="0 10.108 16.323999 20.216 27.216 33.431999 37.324001 43.540001 47.431999 53.647999 64.540001 68.040001 75.040001 81.255997 85.917999 89.809998 96.809998 103.81 110.81 116.998 123.998"
+         y="0"
+         sodipodi:role="line"
+         id="tspan1828">Uživatelem definované</tspan><tspan
+         x="13.986 20.986 27.202 31.864 38.863998 42.756001 49.756001 56.756001 60.256001 67.255997 71.917999 78.917999 89.809998 96.026001 103.026 110.026"
+         y="16.799999"
+         sodipodi:role="line"
+         id="tspan1830">varying proměnné</tspan></text>
+  </g>
+</svg>

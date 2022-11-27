@@ -1,7 +1,0 @@
-AuthName "bugsescape.knapovsky.com statistics"
-AuthType Basic
-AuthUserFile /home/knapovsky/domains/bugsescape.knapovsky.com/.stats-htpasswd
-require valid-user
-<Files .stats-htpasswd>
-deny from all
-</Files>

@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg12129"
+   width="652"
+   height="424"
+   viewBox="0 0 652 424"
+   sodipodi:docname="gpuDisplay.pdf"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs12133">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath12147">
+      <path
+         d="M 0,318 H 489 V 0 H 0 Z"
+         id="path12145" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath12215">
+      <path
+         d="M 0,318 H 489 V 0 H 0 Z"
+         id="path12213" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath12261">
+      <path
+         d="M 0,318 H 489 V 0 H 0 Z"
+         id="path12259" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath12285">
+      <path
+         d="M 0,318 H 489 V 0 H 0 Z"
+         id="path12283" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="namedview12131"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false" />
+  <g
+     id="g12137"
+     inkscape:groupmode="layer"
+     inkscape:label="Page 1"
+     transform="matrix(1.3333333,0,0,-1.3333333,0,424)">
+    <path
+       d="m 415.5,82.5 h -341 v 235 h 341 z"
+       style="fill:#e6e6e6;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="path12139" />
+    <g
+       id="g12141">
+      <g
+         id="g12143"
+         clip-path="url(#clipPath12147)">
+        <path
+           d="m 415.5,82.5 h -341 v 235 h 341 z"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           id="path12149" />
+      </g>
+    </g>
+    <path
+       d="m 166.5,91.5 h -84 v 194 h 84 z"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       id="path12151" />
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,111.9224,191.2314)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text12157"><tspan
+         x="0 8.6639996 15.336"
+         y="0"
+         sodipodi:role="line"
+         id="tspan12153">GPU</tspan><tspan
+         x="-7.6560001 -0.98400003 2.352 8.3520002 13.68 17.016001 20.351999 26.351999"
+         y="14.4"
+         sodipodi:role="line"
+         id="tspan12155">Pipeline</tspan></text>
+    <path
+       d="m 244.5,91.5 h -70 v 44 h 70 z"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       id="path12159" />
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,194.6064,118.1602)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text12163"><tspan
+         x="0 6.6719999 12 21.336 26.664"
+         y="0"
+         sodipodi:role="line"
+         id="tspan12161">Paměť</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,191.9304,103.7602)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text12167"><tspan
+         x="0 6.4920001 11.82 17.82 23.82 27.156 33.155998"
+         y="0"
+         sodipodi:role="line"
+         id="tspan12165">Texutur</tspan></text>
+    <g
+       id="g12169"
+       transform="translate(165.9996,113.4999)">
+      <path
+         d="M 0,0 H 8 Z"
+         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path12171" />
+    </g>
+    <g
+       id="g12173"
+       transform="translate(174,113.5)">
+      <path
+         d="M 0,0 H -8"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path12175" />
+    </g>
+    <path
+       d="m 333.5,91.5 h -84 v 194 h 84 z"
+       style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       id="path12177" />
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,261.6675,268.1294)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text12181"><tspan
+         x="0 6.6719999 10.668 15.996 25.332001 30.66 36.66 42.66 46.439999 50.436001 55.764"
+         y="0"
+         sodipodi:role="line"
+         id="tspan12179">Framebuffer</tspan></text>
+    <path
+       d="m 329.5,208.5 h -76 v 47 h 76 z"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       id="path12183" />
+    <path
+       d="m 329.5,157.5 h -76 v 47 h 76 z"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       id="path12185" />
+    <path
+       d="m 329.5,106.5 h -76 v 47 h 76 z"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       id="path12187" />
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,270.2964,227.8369)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text12195"><tspan
+         x="0 7.3319998 11.328 19.332001 25.332001 29.112 33.108002 38.436001"
+         y="0"
+         sodipodi:role="line"
+         id="tspan12189">Z-Buffer</tspan><tspan
+         x="-9.5159998 -1.512 4.4879999 7.8239999 13.824 17.82 20.82 28.823999 34.824001 38.604 42.599998 47.928001"
+         y="50.832001"
+         sodipodi:role="line"
+         id="tspan12191">Color Buffer</tspan><tspan
+         x="-12.144 -5.4720001 -2.1359999 3.1919999 9.1920004 14.52 17.856001 21.191999 24.191999 32.195999 38.195999 41.964001 45.959999 51.287998"
+         y="101.352"
+         sodipodi:role="line"
+         id="tspan12193">Stencil Buffer</tspan></text>
+    <g
+       id="g12197"
+       transform="translate(165.9996,190.5003)">
+      <path
+         d="M 0,0 H 83.001 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path12199" />
+    </g>
+    <g
+       id="g12201"
+       transform="translate(166,190.5)">
+      <path
+         d="M 0,0 H 83"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path12203" />
+    </g>
+    <path
+       d="m 407.5,169.5 h -66 v 43 h 66 z"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       id="path12205" />
+    <path
+       d="m 488.5,169.5 h -66 v 43 h 66 z"
+       style="fill:#e6e6e6;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="path12207" />
+    <g
+       id="g12209">
+      <g
+         id="g12211"
+         clip-path="url(#clipPath12215)">
+        <path
+           d="m 488.5,169.5 h -66 v 43 h 66 z"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           id="path12217" />
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,429.1797,189.1602)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text12225"><tspan
+         x="0 8.6639996 14.664 18.66 23.988001 29.316 35.316002 41.316002 47.316002"
+         y="0"
+         sodipodi:role="line"
+         id="tspan12219">Obrazovka</tspan><tspan
+         x="-78.108002 -69.444 -64.115997 -58.116001 -52.787998 -48.792 -43.464001 -40.127998 -34.127998"
+         y="-6.4200001"
+         sodipodi:role="line"
+         id="tspan12221">Generátor</tspan><tspan
+         x="-70.452003 -64.452003 -58.452 -54.456001 -49.127998 -43.799999"
+         y="7.98"
+         sodipodi:role="line"
+         id="tspan12223">obrazu</tspan></text>
+    <g
+       id="g12227"
+       transform="translate(333,190.5003)">
+      <path
+         d="M 0,0 H 8 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path12229" />
+    </g>
+    <g
+       id="g12231"
+       transform="translate(333,190.5)">
+      <path
+         d="M 0,0 H 8"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path12233" />
+    </g>
+    <g
+       id="g12235"
+       transform="translate(406.9998,190.5003)">
+      <path
+         d="M 0,0 H 15 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path12237" />
+    </g>
+    <g
+       id="g12239"
+       transform="translate(407,190.5)">
+      <path
+         d="M 0,0 H 15"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path12241" />
+    </g>
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,231.4966,297.8232)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text12245"><tspan
+         x="0 10.108 17.892"
+         y="0"
+         sodipodi:role="line"
+         id="tspan12243">GPU</tspan></text>
+    <path
+       d="m 415.5,40.5 h -342 v 30 h 342 z"
+       style="fill:#e6e6e6;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       id="path12247" />
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,220.1768,51.333)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text12251"><tspan
+         x="0 7.7839999 14.784 21 25.662001 32.661999 36.554001 42.77"
+         y="0"
+         sodipodi:role="line"
+         id="tspan12249">Sběrnice</tspan></text>
+    <path
+       d="m 207.5,0.5 h -135 v 30 h 135 z"
+       style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="path12253" />
+    <g
+       id="g12255">
+      <g
+         id="g12257"
+         clip-path="url(#clipPath12261)">
+        <path
+           d="m 207.5,0.5 h -135 v 30 h 135 z"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           id="path12263" />
+      </g>
+    </g>
+    <g
+       id="g12265"
+       transform="translate(243.5,70)">
+      <path
+         d="M 0,0 V 12"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path12267" />
+    </g>
+    <g
+       id="g12269"
+       transform="translate(139.5,30)">
+      <path
+         d="M 0,0 V 10"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path12271" />
+    </g>
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,126.0498,11.667)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text12275"><tspan
+         x="0 9.3380003 17.122"
+         y="0"
+         sodipodi:role="line"
+         id="tspan12273">CPU</tspan></text>
+    <path
+       d="m 415.5,0.5 h -135 v 30 h 135 z"
+       style="fill:#f2f2f2;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="path12277" />
+    <g
+       id="g12279">
+      <g
+         id="g12281"
+         clip-path="url(#clipPath12285)">
+        <path
+           d="m 415.5,0.5 h -135 v 30 h 135 z"
+           style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           id="path12287" />
+      </g>
+    </g>
+    <g
+       id="g12289"
+       transform="translate(348.5,30)">
+      <path
+         d="M 0,0 V 10"
+         style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path12291" />
+    </g>
+    <text
+       xml:space="preserve"
+       transform="matrix(1,0,0,-1,309.0488,11.333)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:'Times New Roman';-inkscape-font-specification:TimesNewRomanPSMT;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text12295"><tspan
+         x="0 10.108 14 20.216 27.216 34.216 38.108002 41.608002 48.608002 54.824001 65.716003 71.931999"
+         y="0"
+         sodipodi:role="line"
+         id="tspan12293">Hlavní paměť</tspan></text>
+  </g>
+</svg>
